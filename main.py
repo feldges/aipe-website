@@ -2,9 +2,12 @@ from fasthtml.common import *
 import os
 import frontmatter  # you'll need to install python-frontmatter
 
+socials = Socials(title="AIPE Technology", description="Intelligent Deal Screening and Due Diligence for Private Markets", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
+
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
 headers =   (Meta(name="robots", content="noindex, nofollow"),
             MarkdownJS(),
+            socials,
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
             picolink,
