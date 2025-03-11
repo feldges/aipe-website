@@ -5,7 +5,7 @@ import frontmatter  # you'll need to install python-frontmatter
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
 headers =   (Meta(name="robots", content="noindex, nofollow"),
             MarkdownJS(),
-            Favicon('assets/images/favicon.ico', 'assets/images/favicon.ico'),
+            Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
             picolink,
             )
