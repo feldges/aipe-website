@@ -107,7 +107,7 @@ def section_challenges():
             "points": [
                 "AI revolution is disrupting traditional investment processes",
                 "Risk of losing competitive edge to tech-enabled competitors",
-                "Challenge of leveraging technology whil maintaining investment unique approach"
+                "Challenge of leveraging technology while maintaining investment unique approach"
             ]
         },
         {
