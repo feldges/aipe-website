@@ -444,13 +444,16 @@ def app_footer():
                             cls='text-gray-300 hover:text-white block'
                         ),
                         A(
-                            Img(
-                                src='/assets/images/linkedin_white.svg',
-                                alt='LinkedIn',
-                                cls='w-6 h-6'
+                            Div(
+                                Img(
+                                    src='/assets/images/linkedin.svg?v=2',
+                                    alt='LinkedIn',
+                                    cls='w-5 h-5'
+                                ),
+                                cls='text-gray-600'
                             ),
-                            href='https://linkedin.com/company/aipe-technology-ag',
-                            cls='text-gray-300 hover:text-white inline-flex items-center mt-3',
+                            href='https://www.linkedin.com/in/claude-feldges-plocek-78090a1/',
+                            cls='mx-2 group',
                             target='_blank',
                             rel='noopener noreferrer'
                         ),
