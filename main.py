@@ -477,18 +477,22 @@ def app_footer():
                 Div(
                     P(
                         '© 2025 AIPE Technology. All rights reserved.',
-                        cls='text-gray-400 text-xs text-center md:text-left'  # Added text-xs
+                        cls='text-gray-400 text-sm text-center md:text-left'  # Changed from text-xs to text-sm
                     ),
                     Div(
-                        A('Privacy Policy', href='/privacy_policy', cls='text-gray-500 hover:text-gray-300 text-xs'),  # Darker text, smaller size
-                        Span('•', cls='mx-2 text-gray-600 text-xs'),  # Adjusted spacing and color
-                        A('Terms of Service', href='/terms_of_service', cls='text-gray-500 hover:text-gray-300 text-xs'),
-                        Span('•', cls='mx-2 text-gray-600 text-xs'),
+                        A('Privacy Policy', 
+                          href='/privacy_policy', 
+                          cls='text-gray-300 hover:text-white text-sm font-medium'),
+                        Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
+                        A('Terms of Service', 
+                          href='/terms_of_service', 
+                          cls='text-gray-300 hover:text-white text-sm font-medium'),
+                        Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
                         Span('By using this website, you accept our terms and privacy policy.', 
-                             cls='text-gray-500 text-xs'),  # Darker text, smaller size
-                        cls='flex items-center justify-center md:justify-end flex-wrap gap-1'  # Reduced gap
+                             cls='text-gray-400 text-sm'),  # Made consistent with other text
+                        cls='flex items-center justify-center md:justify-end flex-wrap gap-1'
                     ),
-                    cls='flex flex-col md:flex-row justify-between items-center space-y-1 md:space-y-0'  # Reduced spacing
+                    cls='flex flex-col md:flex-row justify-between items-center space-y-1 md:space-y-0'
                 ),
                 cls='border-t border-gray-800 py-3'  # Reduced padding
             ),
