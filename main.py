@@ -111,7 +111,7 @@ def section_challenges():
             ]
         },
         {
-            "title": "Private Wealth Evolution",
+            "title": "Private Wealth Growth",
             "points": [
                 "Rising private wealth participation driving need for automation",
                 "Increased frequency of valuations and reporting",
