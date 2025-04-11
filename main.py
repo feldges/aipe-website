@@ -1,4 +1,5 @@
 from fasthtml.common import *
+from monsterui.all import *  # Added MonsterUI import
 import os
 import frontmatter  # you'll need to install python-frontmatter
 
@@ -34,7 +35,9 @@ def app_header():
            # Navigation items on the right
            Div(
                A('Home', href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A('Solutions', href='/#practical-solutions', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A('Products', href='/#products', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A('Services', href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A('About', href='/about', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Blog', href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Contact',
                  href='/contact',
@@ -129,18 +132,95 @@ def solution_card(title, description, benefits):
         cls='transform transition-all duration-200 hover:scale-[1.02] h-full'
     )
 
-def section_solutions():
+def horizontal_scroll_container(items):
+    """Create a container showing exactly three case studies"""
+    return Div(
+        # Heading for the case studies section
+        Div(
+            H3('Case Studies', cls='text-2xl font-semibold text-center mb-4'),
+            P('Real examples of how our consulting expertise has helped clients', 
+              cls='text-center text-gray-600'),
+            cls='mb-6'
+        ),
+        
+        # Grid container showing exactly 3 items
+        Grid(
+            *items[:3],  # Take first 3 items
+            cols=3,      # 3 columns
+            cols_md=2,   # 2 columns on medium screens
+            cols_sm=1,   # 1 column on small screens
+            gap=4,       # Gap between cards
+            cls='max-w-6xl mx-auto'
+        ),
+        
+        cls='max-w-6xl mx-auto mt-8 mb-8 px-4'
+    )
+
+def case_study_card(title, client_type, challenge, solution, results, image_path=None):
+    """Create a case study card with consistent styling"""
+    return Card(
+        # Card content
+        Div(
+            # Optional image at top
+            Div(
+                Img(
+                    src=image_path,
+                    alt=f"{title} illustration",
+                    cls='w-full h-24 object-cover rounded-t-lg'
+                ),
+                cls='w-full overflow-hidden'
+            ) if image_path else None,
+            
+            # Content section
+            Div(
+                # Label/Client type
+                Div(
+                    client_type,
+                    cls='text-xs font-medium text-blue-700 bg-blue-100 rounded-full px-3 py-1 inline-block mb-2'
+                ),
+                
+                # Title
+                H4(title, cls='text-lg font-semibold text-gray-900 mb-2'),
+                
+                # Challenge section
+                Div(
+                    P(Span('Challenge: ', cls='font-medium text-gray-800'), cls='text-sm mb-1'),
+                    P(challenge, cls='text-sm text-gray-600 mb-2'),
+                    cls='mb-2'
+                ),
+                
+                # Solution section
+                Div(
+                    P(Span('Solution: ', cls='font-medium text-gray-800'), cls='text-sm mb-1'),
+                    P(solution, cls='text-sm text-gray-600 mb-2'),
+                    cls='mb-2'
+                ),
+                
+                # Results section
+                Div(
+                    P(Span('Results: ', cls='font-medium text-gray-800'), cls='text-sm mb-1'),
+                    P(results, cls='text-sm text-gray-600'),
+                ),
+                
+                cls='p-4'
+            ),
+        ),
+        # Using MonsterUI Card component with hover effect
+        cls='h-full transform transition-all duration-200 hover:scale-[1.02] w-full'
+    )
+
+def section_products():
     return Section(
         Div(
             H2(
-                'A Practical Solution',
+                'Our Products',
                 cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
             ),
             P(
-                'This does not have to be! Modern technologies allow for much more automation than what is today\'s norm. Our solutions help you streamline your investment process with AI-powered solutions that maintain human oversight.',
+                'Modern technologies allow for much more automation than what is today\'s norm. Our products help you streamline your investment process with AI-powered solutions that maintain human oversight.',
                 cls='text-center text-gray-600 mb-4 max-w-2xl mx-auto'
             ),
-            # Solution cards grid
+            # Product cards grid
             Div(
                 solution_card(
                     title='Deal Screening',
@@ -166,12 +246,12 @@ def section_solutions():
                 ),
                 cls='grid lg:grid-cols-2 gap-12 mt-8 max-w-6xl mx-auto'
             ),
-            # New CTA section with adjusted spacing
+            # Product CTA section
             Div(
                 Div(
-                    H3('Ready to Transform Your Investment Process?', 
+                    H3('Ready to See Our Products in Action?', 
                        cls='text-2xl font-semibold text-center mb-4'),
-                    P('Get in touch to learn how our solutions can benefit your organization.',
+                    P('Schedule a demo to see how our AI-powered solutions can transform your investment process.',
                       cls='text-gray-600 text-center mb-6'),
                     Div(
                         A('Schedule Demo →',
@@ -186,7 +266,144 @@ def section_solutions():
             ),
             cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
         ),
-        cls='py-16 bg-gray-50', id="practical-solutions"
+        cls='py-16 bg-gray-50', id="products"
+    )
+
+def challenge_item(title, body, tag):
+    """Template for a single challenge item with asset class tag"""
+    return Div(
+        Div(
+            # Container for title and tag with minimal spacing
+            Div(
+                # Title container that can wrap
+                Div(
+                    H3(title, 
+                       cls="text-xl font-semibold text-blue-800 pr-4"),
+                    cls="flex-grow"
+                ),
+                # Tag display with more subtle styling
+                Span(
+                    tag,
+                    cls="text-xs font-medium text-blue-600 bg-blue-50 rounded-full px-3 py-1 flex-shrink-0"
+                ),
+                cls="flex items-start justify-between"  # Removed mb-1 completely
+            ),
+            # Body with reduced top spacing
+            P(body,
+              cls="text-gray-600 mt-1 mb-4"),  # Added mt-1 for minimal space after title
+        ),
+        cls="relative hover:translate-x-1 transition-transform duration-200"
+    )
+
+def section_services():
+    """Services section with challenge-based approach"""
+    # Define challenges as a list of dictionaries
+    challenges = [
+        {
+            "title": "Want to deploy AI at scale?",
+            "body": "Having built and scaled AI solutions at a leading private markets firm, I understand what it takes to succeed. From identifying the right use cases to building scalable solutions and training teams, I can help you navigate the AI journey and create lasting value across your organization.",
+            "tag": "General"
+        },
+        {
+            "title": "Getting ready for private wealth?",
+            "body": "Having scaled private markets operations at a leading firm, I understand what it takes to handle the complexity of private wealth. From streamlining subscription processes to automating reporting, we can help prepare your operations for the private wealth opportunity.",
+            "tag": "Private Wealth"
+        },
+        {
+            "title": "Growing fast and need to scale your operations?",
+            "body": "With 15 years of experience scaling operations at a leading private markets firm, I understand how to transform manual processes into efficient, automated workflows, from investment processes to product management.",
+            "tag": "Operations"
+        },
+        {
+            "title": "Need to increase valuation frequency?",
+            "body": "Having transformed valuation processes at a major private markets firm, we know how to automate valuations, automating data feeds, calculating valuations, and creating a valuation report.",
+            "tag": "Private Markets"
+        },
+        {
+            "title": "Drowning in deal screening?",
+            "body": "At AIPE Technology, we've automated the deal screening process. Our solution processes hundreds of web pages in minutes, extracts key information, and generates an IC memo that helps you quickly assess investment opportunities. This lets your team focus on the deals that matter most.",
+            "tag": "Private Equity"
+        },
+        {
+            "title": "Want your team to focus on analysis rather than paperwork?",
+            "body": "Having developed due diligence automation at AIPE Technology, we understand how to streamline document processing, data extraction, and document generation, letting your analysts focus on what matters most - developing the investment thesis.",
+            "tag": "Private Equity"
+        },
+        {
+            "title": "Need consistent comparable analysis?",
+            "body": "Having built standardized comparable analysis tools at a major private markets firm, I understand how to automate this process effectively. The solution analyzes valuations across market cycles and delivers consistent outputs, eliminating the inefficiency of individual analysts maintaining separate tools.",
+                    "tag": "Private Equity"
+        },
+        {
+            "title": "Need to scale your debt analytics?",
+            "body": "Having transformed a complex Excel-based debt analytics tool into an automated system at a major private markets firm, we know how to handle intricate cash flow modeling and Bloomberg data integration. Our solution scaled from a few to hundreds of investments, freeing the debt team to focus on investment decisions.",
+            "tag": "Private Debt"
+        },
+        {
+            "title": "Losing track of real estate opportunities?",
+            "body": "Drawing from my experience at a major private markets firm, we developed a solution that automatically extracts property details from PDFs and visualizes them on interactive maps. This helps teams maintain a comprehensive view of all opportunities, even those not immediately pursued.",
+            "tag": "Real Estate"
+        },
+        {
+            "title": "Starting your AI journey?",
+            "body": "Having scaled a data science team at a leading private markets firm, I understand what it takes to succeed. From defining the needs to hiring the right talent mix, I can guide you through this journey.",
+            "tag": "Management"
+        },
+        {
+            "title": "Need better oversight of your service providers?",
+            "body": "At AIPE Technology, we're developing a monitoring tool that tracks service provider performance and compliance for SPV structures in private markets. The system automatically detects and alerts you to any breaches or delays in SPV maintenance, helping you maintain operational excellence across your portfolio.",
+            "tag": "Operations"
+        }
+    ]
+
+    return Section(
+        Div(
+            # Header
+            H2(
+                'Consulting Services',
+                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+            ),
+            P(
+                'Beyond our products, we offer expert consulting services to help you optimize your investment processes and integrate AI solutions effectively.',
+                cls='text-center text-gray-600 mb-8 max-w-2xl mx-auto'
+            ),
+            
+            # Challenges section
+            Div(
+                H2("Are you facing these challenges?", 
+                   cls="text-2xl font-semibold text-center mb-8"),
+                
+                # Challenges container with updated mapping
+                Div(
+                    # Map challenges through the template with tag
+                    *[challenge_item(c["title"], c["body"], c["tag"]) for c in challenges],
+                    cls="max-w-3xl mx-auto space-y-6"
+                ),
+                cls="mb-12"
+            ),
+            
+            # CTA section
+            Div(
+                Div(
+                    H3('Looking for Expert Guidance?', 
+                       cls='text-2xl font-semibold text-center mb-4'),
+                    P('Book a consultation to discuss how we can help optimize your investment process.',
+                      cls='text-gray-600 text-center mb-6'),
+                    Div(
+                        A('Book a Consultation →',
+                          href='/contact',
+                          cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
+                        ),
+                        cls='text-center'
+                    ),
+                    cls='max-w-2xl mx-auto px-4'
+                ),
+                cls='border-t border-gray-200 pt-8 mt-8'
+            ),
+            cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
+        ),
+        cls='py-16 bg-white', 
+        id="services"
     )
 
 def app_footer():
@@ -218,7 +435,7 @@ def app_footer():
                         ),
                         A(
                             Img(
-                                src='/assets/images/linkedin.svg',
+                                src='/assets/images/linkedin_white.svg',
                                 alt='LinkedIn',
                                 cls='w-6 h-6'
                             ),
@@ -376,7 +593,7 @@ def section_blog():
             ),
             cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
         ),
-        cls='py-16'
+        cls='py-16 bg-gray-50'  # Added bg-gray-50 to match Products section
     )
 
 @app.get('/blog')
@@ -455,13 +672,165 @@ def privacy_policy():
         app_footer()
     )
 
+@app.get('/about')
+def about():
+    return Div(
+        app_header(),
+        Section(
+            Div(
+                H1('About', cls='text-4xl font-bold text-gray-900 mb-8 text-center'),  # Updated to H1 and added more margin
+                # Two-column layout for desktop
+                Div(
+                    # Left column with photo and quick facts
+                    Div(
+                        Img(
+                            src='/assets/images/feldges.jpg',
+                            alt='Dr. Claude Feldges',
+                            cls='rounded-full w-48 h-48 object-cover mx-auto mb-6 shadow-lg border-2 border-blue-100'
+                        ),
+                        Div(
+                            P(
+                                Span('Dr. Claude Feldges', cls='font-medium block text-xl'),
+                                cls='text-center text-gray-700 mb-6'
+                            ),
+                            Div(
+                                A(
+                                    Div(
+                                        Img(
+                                            src='/assets/images/linkedin.svg?v=2',
+                                            alt='LinkedIn',
+                                            cls='w-5 h-5'
+                                        ),
+                                        cls='text-gray-600'
+                                    ),
+                                    href='https://www.linkedin.com/company/aipe-technology-ag/',
+                                    cls='mx-2 group',
+                                    target='_blank',
+                                    rel='noopener noreferrer'
+                                ),
+                                cls='flex justify-center'
+                            ),
+                            cls='mb-6'
+                        ),
+                        cls='w-full lg:w-1/3 px-6 mb-8 lg:mb-0 flex flex-col items-center'  # Updated classes
+                    ),
+                    # Right column with detailed bio
+                    Div(
+                        H3('Combining Technical Expertise with Industry Knowledge', cls='text-xl font-semibold text-blue-800 mb-4'),
+                        P(
+                            'As a leader in applying AI technologies to private markets, '
+                            'I bridge the gap between technical implementation and '
+                            'industry-specific knowledge. With over 15 years of experience '
+                            'at Partners Group AG, a global leader and innovator in private '
+                            'markets, I combine deep industry expertise with strong '
+                            'quantitative skills from my PhD in Physics to bring a unique '
+                            'perspective to digital transformation in the private markets industry.',
+                            cls='text-gray-700 mb-4'
+                        ),
+                        P(
+                            'My hands-on experience spans from building enterprise AI '
+                            'solutions to optimizing investment processes. Throughout my '
+                            'career, I\'ve successfully implemented GenAI strategies and '
+                            'developed solutions that streamline investment processes.',
+                            cls='text-gray-700 mb-4'
+                        ),
+                        P(
+                            'Driven by a passion for innovation and a vision for the future '
+                            'of private markets, I left my role at Partners Group to found '
+                            'AIPE Technology. I believe in the transformative potential of '
+                            'AI to enhance investment decision-making while maintaining the '
+                            'crucial element of human judgment.',
+                            cls='text-gray-700 mb-4'
+                        ),
+                        P(
+                            'At AIPE Technology, I stay at the forefront of AI innovation '
+                            'in private markets, creating solutions that generate real business value '
+                            'for investment and operational teams while maintaining human oversight.',
+                            cls='text-gray-700 mb-4'
+                        ),
+                        H3('Why Work With Me', cls='text-xl font-semibold text-blue-800 mt-6 mb-4'),
+                        Div(
+                            Div(
+                                Div(
+                                    '✓',
+                                    cls='w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center shadow-sm text-white text-sm flex-shrink-0'
+                                ),
+                                Div(
+                                    'Practical Experience: From concept to implementation, I\'ve built systems that drive real business value',
+                                    cls='ml-3 text-gray-700'
+                                ),
+                                cls='flex items-center mb-3 transform transition-transform duration-200 hover:translate-x-2'  # Added hover effect
+                            ),
+                            Div(
+                                Div(
+                                    '✓',
+                                    cls='w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center shadow-sm text-white text-sm flex-shrink-0'
+                                ),
+                                Div(
+                                    'Private Markets Expertise: Deep understanding of investment processes, challenges, and opportunities',
+                                    cls='ml-3 text-gray-700'
+                                ),
+                                cls='flex items-center mb-3 transform transition-transform duration-200 hover:translate-x-2'  # Added hover effect
+                            ),
+                            Div(
+                                Div(
+                                    '✓',
+                                    cls='w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center shadow-sm text-white text-sm flex-shrink-0'
+                                ),
+                                Div(
+                                    'Technical Depth: From data science to full-stack development, I speak both business and technology',
+                                    cls='ml-3 text-gray-700'
+                                ),
+                                cls='flex items-center mb-3 transform transition-transform duration-200 hover:translate-x-2'  # Added hover effect
+                            ),
+                            Div(
+                                Div(
+                                    '✓',
+                                    cls='w-6 h-6 rounded-full bg-blue-700 flex items-center justify-center shadow-sm text-white text-sm flex-shrink-0'
+                                ),
+                                Div(
+                                    'Education Focus: Proven track record of training technical teams and driving AI adoption',
+                                    cls='ml-3 text-gray-700'
+                                ),
+                                cls='flex items-center transform transition-transform duration-200 hover:translate-x-2'  # Added hover effect
+                            ),
+                            cls='mt-2'
+                        ),
+                        cls='lg:w-2/3 px-6'
+                    ),
+                    cls='flex flex-wrap lg:flex-nowrap'
+                ),
+                # Call to action
+                Div(
+                    Div(
+                        P('Ready to transform your investment processes with AI?', cls='text-xl font-medium text-center mb-5'),
+                        Div(
+                            A(
+                                'Schedule a Consultation →',
+                                href='/contact',
+                                cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
+                            ),
+                            cls='text-center'
+                        ),
+                        cls='max-w-2xl mx-auto px-4'
+                    ),
+                    cls='border-t border-gray-200 pt-10 mt-10'
+                ),
+                cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
+            ),
+            cls='py-16 bg-white'
+        ),
+        app_footer()
+    )
+
 @app.get('/')
 def home():
     return Div(
         app_header(),
         section_hero(),
         section_challenges(),
-        section_solutions(),
+        section_products(),
+        section_services(),
         section_blog(),
         app_footer()
     )
@@ -552,4 +921,4 @@ def contact():
     )
 
 if __name__ == "__main__":
-    serve(host='0.0.0.0', port=8080, reload=False)
+    serve(host='0.0.0.0', port=8080, reload=True)
