@@ -1,69 +1,79 @@
 # Privacy Policy
 
-*Last updated: April 11, 2025*
+*Last updated: April 14, 2025*
 
 ## Introduction
 
-AIPE Technology ("we," "our," or "us") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website (aipetech.com & aipe.tech).
+AIPE Technology ("we," "our," or "us") respects your privacy. We believe in being transparent about how we collect and use information on our website (aipetech.com & aipe.tech).
 
 ## Information We Collect
 
-We collect information automatically when you visit our website:
+We use two main ways to understand how visitors interact with our website:
 
-**Analytics Data**: With your consent, we collect anonymized usage data through Google Analytics, including:
-- Pages visited and time spent on pages
-- How you reached our site
-- General geographic location (city/country level)
-- Device information
+**Analytics Data**: With your consent, we use Google Analytics to collect anonymous usage statistics:
+- Which pages are most popular
+- How long people spend on different pages
+- How visitors find our website
+- General geographic areas where visits come from (country/city level, never specific locations)
+- Basic device information (like mobile or desktop)
 
-This data does not personally identify you and is used solely for website improvement.
+Important: This data is completely anonymous - we cannot identify individual visitors.
 
-**Server Logs**: We collect standard server logs, which include:
-- IP addresses
-- Date and time of access
-- Pages visited
-- Technical information about your browser and operating system
+**Basic Server Logs**: Our web servers automatically collect basic technical information:
+- Anonymous access logs
+- Basic technical details needed for the website to work properly
+- General system information for security
 
-This information is automatically collected by our web servers for security purposes and basic website functionality.
+This basic information helps us keep our website running smoothly and securely.
 
-## Cookies and Tracking Technologies
+## Cookies and Your Choices
 
-Our website uses cookies and similar tracking technologies:
+Our website uses cookies (small text files) in two ways:
 
-- **Analytics cookies**: We use Google Analytics to collect information about how visitors use our site. This helps us improve our website and your experience.
-- **Functional cookies**: These are necessary for the website to function properly.
-- You can manage your cookie preferences through our consent banner provided by Cookiebot.
+- **Analytics cookies**: These help us understand how people use our site, but only with your permission.
+- **Essential cookies**: These are necessary for basic website functions to work.
 
-## How We Use Your Information
+You have full control through our cookie consent banner (powered by Cookiebot), where you can:
+- Choose which cookies to accept
+- Change your preferences anytime
+- Decline non-essential cookies
 
-We use the collected information solely for:
-- Maintaining the security of our website
-- Analyzing website performance and traffic patterns
-- Troubleshooting technical issues
-- Improving our website based on user behavior and preferences
+## How We Use This Information
 
-## Data Storage and Security
+We use this anonymous information to:
+- Keep our website working properly
+- Understand what content is most helpful
+- Make our website better for visitors
+- Improve our services based on general usage patterns
 
-- Server logs are stored securely and are automatically deleted after 30 days
-- We implement appropriate security measures to protect against unauthorized access
+## Data Privacy and Security
+
+- We only collect anonymous data
+- We don't store personal information
+- Server logs are automatically deleted after 30 days
+- We use industry-standard security measures
 
 ## Third-Party Services
 
-- **Google Analytics**: We use Google Analytics to understand how visitors interact with our website. Google may process your data according to their privacy policy: https://policies.google.com/privacy
+We use two trusted services:
 
-- **Cookiebot**: We use Cookiebot to manage cookie consent. Their privacy policy can be found at: https://www.cookiebot.com/en/privacy-policy/
+- **Google Analytics**: Helps us understand website usage (anonymously)
+  - You can learn more at: https://policies.google.com/privacy
+
+- **Cookiebot**: Manages cookie preferences
+  - You can learn more at: https://www.cookiebot.com/en/privacy-policy/
 
 ## Your Rights
 
-You have the right to:
-- Request information about what data we hold about you
-- Request deletion of your data from our logs
-- Object to our processing of your data
+You can:
+- Choose not to accept analytics cookies
+- Request information about our data practices
+- Contact us with any privacy questions
 
 ## Contact Us
 
-For any privacy-related questions or concerns, please contact us at: info@aipetech.com.
+For any questions about privacy, please email us at: info@aipetech.com
 
 ## Changes to This Policy
 
-We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+If we update this policy, we'll post the new version here with an updated date.

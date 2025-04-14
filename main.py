@@ -1,5 +1,4 @@
 from fasthtml.common import *
-from monsterui.all import *  # Added MonsterUI import
 import os
 import frontmatter  # you'll need to install python-frontmatter
 from dotenv import load_dotenv
@@ -57,7 +56,7 @@ app = FastHTML(hdrs=headers, title="AIPE Technology")
 def get(fname:str, ext:str): return FileResponse(f'{fname}.{ext}')
 
 def app_header():
-   return Div(
+   return Header(
        Div(
            # Logo on the far left
            A(
@@ -70,7 +69,7 @@ def app_header():
                cls='no-underline ml-3 sm:ml-5'
            ),
            # Navigation items on the right
-           Div(
+           Nav(
                A('Home', href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Products', href='/#products', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Services', href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
@@ -88,7 +87,7 @@ def app_header():
    )
 
 def section_hero():
-    return Header(
+    return Section(
         Div(
             H1(
                 Span('AIPE Technology', cls='text-blue-800'),
@@ -238,7 +237,7 @@ def horizontal_scroll_container(items):
               cls='text-center text-gray-600'),
             cls='mb-6'
         ),
-        
+
         # Grid container showing exactly 3 items
         Grid(
             *items[:3],  # Take first 3 items
@@ -484,7 +483,7 @@ def app_footer():
                             Div(
                                 Img(
                                     src='/assets/images/linkedin.svg?v=2',
-                                    alt='LinkedIn',
+                                    alt='Connect with us on LinkedIn',
                                     cls='w-5 h-5'
                                 ),
                                 cls='text-gray-600'
@@ -732,6 +731,7 @@ def privacy_policy():
 def about():
     return Div(
         app_header(),
+        Main(
         Section(
             Div(
                 H1('About', cls='text-4xl font-bold text-gray-900 mb-8 text-center'),
@@ -741,7 +741,7 @@ def about():
                     Div(
                         Img(
                             src='/assets/images/feldges.jpg',
-                            alt='Dr. Claude Feldges',
+                            alt='Claude Feldges',
                             cls='rounded-full w-48 h-48 object-cover mx-auto mb-6 shadow-lg border-2 border-blue-100'
                         ),
                         Div(
@@ -754,7 +754,7 @@ def about():
                                     Div(
                                         Img(
                                             src='/assets/images/linkedin.svg?v=2',
-                                            alt='LinkedIn',
+                                            alt='Connect with Claude Feldges on LinkedIn',
                                             cls='w-5 h-5'
                                         ),
                                         cls='text-gray-600'
@@ -853,6 +853,7 @@ def about():
             ),
             cls='py-16 bg-white'
         ),
+        ),
         app_footer()
     )
 
@@ -860,13 +861,15 @@ def about():
 def home():
     return Div(
         app_header(),
-        section_hero(),
-        section_challenges(),
-        section_products(),
-        section_services(),
-        section_blog(),
+        Main(
+            section_hero(),
+            section_challenges(),
+            section_products(),
+            section_services(),
+            section_blog()
+        ),
         app_footer()
-    )
+        )
 
 @app.get('/blog/{url_path}')
 def blog_post(url_path: str):
@@ -880,28 +883,34 @@ def blog_post(url_path: str):
 
         return Div(
             app_header(),
-            Div(
-                Div(
-                    # Fixed aspect ratio container for the featured image
-                    Div(
-                        Img(
-                            src=post.metadata.get('image', ''),
-                            alt=post.metadata['title'],
-                            cls='w-full h-full object-cover'  # Same image handling as cards
+            Article(
+                Div(  # Keep outer div for bg-white
+                    Div(  # Keep inner div for max-width and padding
+                        # Fixed aspect ratio container for the featured image
+                        Div(  # Keep this div for image container styling
+                            Img(
+                                src=post.metadata.get('image', ''),
+                                alt=post.metadata['title'],
+                                cls='w-full h-full object-cover'  # Same image handling as cards
+                            ),
+                            cls='w-full h-96 overflow-hidden mb-8'  # Taller height (24rem) for feature image
+                        ) if post.metadata.get('image') else None,
+                        H1(post.metadata['title'], cls='text-4xl font-bold mb-4'),
+                        Header(  # Changed from Div to Header for metadata
+                            Time(  # Changed from Span to Time for date
+                                post.metadata['date'].strftime('%B %d, %Y') if hasattr(post.metadata['date'], 'strftime') else str(post.metadata['date']),
+                                datetime=post.metadata['date'].strftime('%Y-%m-%d') if hasattr(post.metadata['date'], 'strftime') else '',
+                                cls='text-gray-600'
+                            ),
+                            Span(' • ', cls='mx-2 text-gray-400'),
+                            Span(f"{post.metadata['readTime']} min read", cls='text-gray-600'),
+                            cls='mb-8'
                         ),
-                        cls='w-full h-96 overflow-hidden mb-8'  # Taller height (24rem) for feature image
-                    ) if post.metadata.get('image') else None,
-                    H1(post.metadata['title'], cls='text-4xl font-bold mb-4'),
-                    Div(
-                        Span(post.metadata['date'].strftime('%B %d, %Y') if hasattr(post.metadata['date'], 'strftime') else str(post.metadata['date']), cls='text-gray-600'),
-                        Span(' • ', cls='mx-2 text-gray-400'),
-                        Span(f"{post.metadata['readTime']} min read", cls='text-gray-600'),
-                        cls='mb-8'
+                        Section(post.content, cls='marked prose prose-lg max-w-none'),  # Changed from Div to Section
+                        cls='max-w-3xl mx-auto px-4 py-12'
                     ),
-                    Div(post.content, cls='marked prose prose-lg max-w-none'),
-                    cls='max-w-3xl mx-auto px-4 py-12'
-                ),
-                cls='bg-white'
+                    cls='bg-white'
+                )
             ),
             app_footer()
         )

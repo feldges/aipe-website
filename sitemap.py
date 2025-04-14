@@ -17,6 +17,8 @@ def sitemap(blog_posts: List[Dict]) -> PlainTextResponse:
         {'url': '/about', 'changefreq': 'monthly', 'priority': '0.8'},
         {'url': '/blog', 'changefreq': 'weekly', 'priority': '0.8'},
         {'url': '/contact', 'changefreq': 'monthly', 'priority': '0.7'},
+        {'url': '/privacy_policy', 'changefreq': 'monthly', 'priority': '0.5'},
+        {'url': '/terms_of_service', 'changefreq': 'monthly', 'priority': '0.5'}
     ]
 
     today = datetime.now().strftime('%Y-%m-%d')
