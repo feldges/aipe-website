@@ -2,8 +2,16 @@ from fasthtml.common import *
 from monsterui.all import *  # Added MonsterUI import
 import os
 import frontmatter  # you'll need to install python-frontmatter
+from dotenv import load_dotenv
 
-socials = Socials(title="AIPE Technology", description="Intelligent Deal Screening and Due Diligence for Private Markets", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
+# Load environment variables
+load_dotenv()
+
+# Get environment variables
+ga_id = os.getenv('GOOGLE_ANALYTICS_ID')
+cookiebot_id = os.getenv('COOKIEBOT_ID')
+
+socials = Socials(title="AIPE Technology", description="Technology Solutions for Private Markets", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
 
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
 headers =   (Meta(name="robots", content="noindex, nofollow"),
@@ -12,6 +20,20 @@ headers =   (Meta(name="robots", content="noindex, nofollow"),
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
             picolink,
+            # Add Cookiebot script first
+            Script(src="https://consent.cookiebot.com/uc.js", 
+                  id="Cookiebot",
+                  data_cbid=cookiebot_id,
+                  type="text/javascript",
+                  _async=True),
+            # Then Google Analytics scripts
+            Script(src=f"https://www.googletagmanager.com/gtag/js?id={ga_id}", _async=True),
+            Script(f"""
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){{dataLayer.push(arguments);}}
+              gtag('js', new Date());
+              gtag('config', '{ga_id}');
+            """),
             )
 
 app = FastHTML(hdrs=headers, title="AIPE Technology")
