@@ -3,6 +3,7 @@ from monsterui.all import *  # Added MonsterUI import
 import os
 import frontmatter  # you'll need to install python-frontmatter
 from dotenv import load_dotenv
+from sitemap import sitemap
 
 # Load environment variables
 load_dotenv()
@@ -14,14 +15,14 @@ cookiebot_id = os.getenv('COOKIEBOT_ID')
 socials = Socials(title="AIPE Technology", description="Technology Solutions for Private Markets", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
 
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
-headers =   (Meta(name="robots", content="noindex, nofollow"),
+headers =   (Meta(name="robots", content="index, follow"),
             MarkdownJS(),
             socials,
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
             picolink,
             # Add Cookiebot script first
-            Script(src="https://consent.cookiebot.com/uc.js", 
+            Script(src="https://consent.cookiebot.com/uc.js",
                   id="Cookiebot",
                   data_cbid=cookiebot_id,
                   type="text/javascript",
@@ -34,6 +35,20 @@ headers =   (Meta(name="robots", content="noindex, nofollow"),
               gtag('js', new Date());
               gtag('config', '{ga_id}');
             """),
+            Script("""
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "AIPE Technology",
+              "url": "https://www.aipe.tech",
+              "description": "Technology Solutions for Private Markets",
+              "email": "info@aipetech.com",
+              "logo": "https://www.aipe.tech/assets/images/aipe_technology_screen.png",
+              "sameAs": [
+                "https://www.linkedin.com/company/aipe-technology-ag/"
+              ]
+            }
+            """, type="application/ld+json"),
             )
 
 app = FastHTML(hdrs=headers, title="AIPE Technology")
@@ -474,7 +489,7 @@ def app_footer():
                                 ),
                                 cls='text-gray-600'
                             ),
-                            href='https://www.linkedin.com/in/claude-feldges-plocek-78090a1/',
+                            href='https://www.linkedin.com/company/aipe-technology-ag/',
                             cls='mx-2 group',
                             target='_blank',
                             rel='noopener noreferrer'
@@ -937,6 +952,13 @@ def contact():
             cls='min-h-screen flex flex-col'
         )
     )
+
+# Technical website sitemap
+@app.get('/sitemap.xml')
+def sitemap_route():
+    # Get all blog posts
+    blog_posts = get_blog_posts()
+    return sitemap(blog_posts)
 
 if __name__ == "__main__":
     serve(host='0.0.0.0', port=8080, reload=True)
