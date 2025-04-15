@@ -20,13 +20,35 @@ headers =   (Meta(name="robots", content="index, follow"),
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
             picolink,
-            # Add Cookiebot script first
+            # First set default consent settings to denied
+            Script("""
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500
+                });
+                """),
+            # Add Cookiebot script second
             Script(src="https://consent.cookiebot.com/uc.js",
                   id="Cookiebot",
                   data_cbid=cookiebot_id,
+                  data_blockingmode="auto",
                   type="text/javascript",
                   _async=True),
-            # Then Google Analytics scripts
+            # Add the Cookiebot callback function third
+            Script("""
+                window.addEventListener('CookiebotOnConsentReady', function () {
+                if (Cookiebot.consented === true) {
+                    gtag('consent', 'update', {
+                    'ad_storage': Cookiebot.consent.marketing ? 'granted' : 'denied',
+                    'analytics_storage': Cookiebot.consent.statistics ? 'granted' : 'denied'
+                    });
+                }
+                });
+            """),
+            # Then Google Analytics scripts fourth
             Script(src=f"https://www.googletagmanager.com/gtag/js?id={ga_id}", _async=True),
             Script(f"""
               window.dataLayer = window.dataLayer || [];
