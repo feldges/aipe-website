@@ -3,7 +3,6 @@ import os
 import frontmatter  # you'll need to install python-frontmatter
 from dotenv import load_dotenv
 from sitemap import sitemap
-
 # Load environment variables
 load_dotenv()
 
@@ -73,6 +72,10 @@ headers =   (Meta(name="robots", content="index, follow"),
             )
 
 app = FastHTML(hdrs=headers, title="AIPE Technology")
+
+@app.get("/{fname:path}.xml")
+def get_xml(fname: str):
+    return FileResponse(f"{fname}.xml")
 
 @app.get("/{fname:path}.{ext:static}")
 def get(fname:str, ext:str): return FileResponse(f'{fname}.{ext}')
@@ -984,12 +987,10 @@ def contact():
         )
     )
 
-# Technical website sitemap
-@app.get('/sitemap.xml')
-def sitemap_route():
-    # Get all blog posts
-    blog_posts = get_blog_posts()
-    return sitemap(blog_posts)
-
 if __name__ == "__main__":
-    serve(host='0.0.0.0', port=8080, reload=True)
+    # Generate sitemap
+    from sitemap import sitemap
+    sitemap()
+    
+    # Start server
+    serve(host='0.0.0.0', port=8080, reload=False)
