@@ -6,8 +6,6 @@ readTime: 5
 description: We explore the future of AI.
 image: /assets/images/blog/what-is-the-future-of-ai.jpg
 ---
-## What is the future of AI?
-
 What is the future of AI? I don’t know! But let’s look at what thought leaders say.
 
 Recently, Richard Socher gave an interesting interview about the future of AI. His perspective is particularly valuable since he was the first person who applied Deep Learning to natural language processing (in other words, we owe him the current AI revolution). He is now the CEO of You.com, a startup that has developed what many consider one of the best LLM tools in the market.

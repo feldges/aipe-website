@@ -6,8 +6,6 @@ readTime: 3
 description: We analyze DeepSeek's R1 model and its implications for the AI industry.
 image: /assets/images/blog/deepseek-s-r1-is-great-here-s-the-catch.jpg
 ---
-## DeepSeek’s R1 is Great. Here’s the Catch.
-
 As many have written recently, the Chinese company DeepSeek deployed two very competitive language models, V3, and R1. The latter gained significant attention for its reasoning capabilities, which are reportedly on par with OpenAI’s leading model, but at a fraction of the costs. These models have been open-sourced, making them transparent and available to the entire community — a significant contribution to AI research and development.
 
 While these developments are impressive and welcome, they raise important questions about AI development, training methodologies, and the future of global AI ecosystems.

@@ -6,8 +6,6 @@ readTime: 6
 description: We present a framework for generating comprehensive reports with LLMs.
 image: /assets/images/blog/beyond-chatbots-building-reports-with-large-language-models.jpg
 ---
-## Beyond Chatbots: Building Reports with Large Language Models
-
 ## Introduction
 
 As Large Language Models (LLMs) transform business processes, organizations are exploring applications beyond chatbots. This article examines STORM, a framework that automates comprehensive report generation.
