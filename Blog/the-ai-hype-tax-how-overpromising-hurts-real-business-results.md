@@ -6,9 +6,6 @@ readTime: 2
 description: "How overpromising hurts AI adoption and what smart companies do instead."
 image: /assets/images/blog/the-ai-hype-tax-how-overpromising-hurts-real-business-results.jpg
 ---
-
-# The AI Hype Tax: How Overpromising Hurts Real Business Results
-
 I recently spoke with a tech leader at a major company who shared something that's been bothering me. Despite being sharp technically, he'd been swept up by AI vendor promises that sounded too good to be true – because they were.
 
 It got me thinking about accountability in how we sell emerging technology. Let me paint you two pictures:
