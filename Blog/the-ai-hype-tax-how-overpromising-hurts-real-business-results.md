@@ -19,7 +19,7 @@ It got me thinking about accountability in how we sell emerging technology. Let 
 
 Same overselling, opposite consequences.
 
-Here's the thing: I'm so positive on AI that I bet my career on it. I see the real value it creates at the companies I advise, in my own work where AI is a force multiplier, and in AI-first companies like Cursor hitting \$200M revenue (ARR) with just 20 employees. People who understand how to actually use the technology benefit hugely – while others get lost chasing overpromised solutions. But watching brilliant tech leaders make multimillion-dollar decisions based on vendor hype instead of realistic capabilities? We're missing out on AI's true potential. And that hurts.
+Here's the thing: I'm very positive on AI. I see the real value it creates at the companies I advise, in my own work where AI is a force multiplier, and in AI-first companies like Cursor hitting \$200M revenue (ARR) with just 20 employees. People who understand how to actually use the technology benefit hugely – while others get lost chasing overpromised solutions. But watching brilliant tech leaders make multimillion-dollar decisions based on vendor hype instead of realistic capabilities? We're missing out on AI's true potential. And that hurts.
 
 The companies succeeding with AI aren't chasing moonshots – they're identifying specific use cases, setting realistic expectations, and measuring actual ROI. They're the ones seeing transformational results.
 
