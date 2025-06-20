@@ -115,13 +115,68 @@ def section_hero():
     return Section(
         Div(
             H1(
-                Span('AIPE Technology', cls='text-blue-800'),
+                Span('Bridging the AI adoption gap.', cls='text-blue-800'),
                 cls='text-4xl font-bold sm:text-5xl'
             ),
-            P('Technology Solutions for Private Markets',
-              cls='mt-4 text-2xl text-gray-800 font-semibold mb-2 max-w-2xl mx-auto'),
-            P('Practical solutions that scale your operations',
-              cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto'),
+            P('At AIPE Technology, we show you what is possible and give you clear guidance on how to make AI part of your core business.',
+              cls='mt-4 text-2xl text-gray-800 font-semibold mb-2 max-w-4xl'),
+            P(
+                Span('Why choose us ', cls='font-semibold'),
+                'We don\'t just talk about AI possibilities - we build working proof. Here\'s how we turn your challenges into working solutions:',
+                cls='text-xl text-gray-600 mb-4 max-w-4xl'
+            ),
+            # Three-step process cards
+            Div(
+                # Step 1: Discover
+                Div(
+                    Div(
+                        "🔍",
+                        cls='text-3xl mb-3'
+                    ),
+                    H3(
+                        'Discover',
+                        cls='text-xl font-semibold text-blue-800 mb-2'
+                    ),
+                    P(
+                        'Identify where AI can create meaningful impact for your business.',
+                        cls='text-gray-600 text-base'
+                    ),
+                    cls='text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+                ),
+                # Step 2: Validate
+                Div(
+                    Div(
+                        "✅",
+                        cls='text-3xl mb-3'
+                    ),
+                    H3(
+                        'Validate',
+                        cls='text-xl font-semibold text-blue-800 mb-2'
+                    ),
+                    P(
+                        'Build a working proof of concept for your specific challenge.',
+                        cls='text-gray-600 text-base'
+                    ),
+                    cls='text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+                ),
+                # Step 3: Scale
+                Div(
+                    Div(
+                        "🚀",
+                        cls='text-3xl mb-3'
+                    ),
+                    H3(
+                        'Scale',
+                        cls='text-xl font-semibold text-blue-800 mb-2'
+                    ),
+                    P(
+                        'Implement the validated solution across your organization.',
+                        cls='text-gray-600 text-base'
+                    ),
+                    cls='text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+                ),
+                cls='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mb-8'
+            ),
             Div(
                 A(
                     'Schedule Demo ',
@@ -129,9 +184,9 @@ def section_hero():
                     href='/contact',
                     cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
                 ),
-                cls='mt-8'
+                cls='mt-8 text-center'
             ),
-            cls='max-w-5xl mx-auto px-6 text-center'
+            cls='max-w-5xl mx-auto px-6'
         ),
         cls="py-20 bg-gray-50"
     )
@@ -207,6 +262,212 @@ def section_challenges():
             cls='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
         ),
         cls='py-16'
+    )
+
+def section_mission():
+    return Section(
+        Div(
+            P(
+                'Our Mission',
+                cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+            ),
+            H2(
+                'We help SMEs scaling faster and smarter with AI.',
+                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+            ),
+        ),
+        cls='py-16'
+    )
+
+def portfolio_card(portfolio_element):
+    # Create video element (either real video with thumbnail or placeholder)
+    def create_video_element():
+        video_filename = portfolio_element["links"]["Video"]
+        
+        if video_filename and video_filename != "":
+            # Real video exists - create video player with thumbnail poster
+            thumbnail_filename = video_filename.replace('.mp4', '.png')
+            return Div(
+                Video(
+                    src=f"/assets/videos/{video_filename}",
+                    poster=f"/assets/videos/{thumbnail_filename}",
+                    controls=True,
+                    preload="metadata",
+                    muted=True,  # Start without sound
+                    cls='w-full h-full rounded-lg'
+                ),
+                cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
+            )
+        else:
+            # No video - create placeholder
+            return Div(
+                Div(
+                    # Background placeholder
+                    Div(
+                        cls='w-full h-full bg-gray-200 rounded-lg flex items-center justify-center'
+                    ),
+                    # Play button overlay
+                    Div(
+                        Img(
+                            src="/assets/images/video.svg",
+                            alt="Play video",
+                            cls='w-12 h-12 text-gray-600'
+                        ),
+                        cls='absolute inset-0 flex items-center justify-center'
+                    ),
+                    # "Coming Soon" text
+                    Div(
+                        P(
+                            "Video coming soon",
+                            cls='text-sm text-gray-500 font-medium'
+                        ),
+                        cls='absolute bottom-3 left-3'
+                    ),
+                    cls='absolute inset-0 bg-gray-200 rounded-lg overflow-hidden'
+                ),
+                cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
+            )
+    
+    # Create link buttons with SVG icons
+    def create_link_button(link_type, url, icon_src):
+        return A(
+            Img(
+                src=icon_src,
+                alt=f"{link_type} link",
+                cls='w-4 h-4 inline-block ml-2 bg-gray-100 hover:bg-blue-100 text-gray-600 hover:text-blue-600 rounded p-1 transition-colors duration-200'
+            ),
+            href=url if url != "tbd" else "#",
+            cls='inline-block',
+            **({"onclick": "return false;"} if url == "tbd" else {})
+        )
+    
+    # Create the link buttons with SVG icons
+    link_buttons = [
+        create_link_button("GitHub", portfolio_element["links"]["GitHub"], "/assets/images/github.svg"),
+        create_link_button("Demo", portfolio_element["links"]["Demo"], "/assets/images/external-link.svg")
+    ]
+    
+    return Div(
+        # Title with responsive height
+        Div(
+            H3(portfolio_element["title"], cls='text-xl font-semibold text-blue-800'),
+            cls='min-h-[4rem] lg:h-16 flex items-start'  # min-height on mobile, fixed height on large screens
+        ),
+        # Description with responsive height
+        Div(
+            P(
+                portfolio_element["description"],
+                *link_buttons,
+                cls='text-gray-600'
+            ),
+            cls='min-h-[8rem] lg:h-32 flex items-start'  # min-height on mobile, fixed height on large screens
+        ),
+        # Video element (real video or placeholder)
+        create_video_element(),
+        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200'
+    )
+
+def section_portfolio():
+    portfolio = [
+    {
+        "category": "Investment Tools",
+        "title": "CIM Data Extraction Platform",
+        "description": "Extract structured financial data from CIMs with intelligent copy-paste. Numbers automatically format for Excel, text stays clean.",
+        "links": {
+            "Video": "cim-data-extraction-platform.mp4",
+            "GitHub": "tbd",
+            "Demo": "tbd"
+                }
+    },
+    {
+        "category": "Investment Tools",
+        "title": "Comprehensive PE Due Diligence Assistant",
+        "description": "End-to-end due diligence automation: upload documents, extract data, run analysis, generate Word reports. Fully customizable with visual controls and user oversight at each step.",
+        "links": {
+            "Video": "",
+            "GitHub": "tbd",
+            "Demo": "tbd"
+                }
+    },
+    {
+        "category": "Investment Tools",
+        "title": "M&A Target Research Intelligence",
+        "description": "Automated LinkedIn research for target companies. Select roles, get curated profile lists, reorder by relevance, export to Excel. Simple interface, full user control.",
+        "links": {
+            "Video": "m-and-a-target-research-intelligence.mp4",
+            "GitHub": "tbd",
+            "Demo": "tbd"
+                }
+    },
+    {
+        "category": "Business Automation",
+        "title": "Treasury Invoice Translation System",
+        "description": "Upload non-English invoices, view original and translated versions side-by-side, extract key data (date, amount, bank details). For centralized payment teams.",
+        "links": {
+            "Video": "",
+            "GitHub": "tbd",
+            "Demo": "tbd"
+                }
+    },
+    {
+        "category": "Business Automation",
+        "title": "Work Smarter AI - Document Intelligence",
+        "description": "AI assistant integrated into Word for document tasks. Brings AI to where people work.",
+        "links": {
+            "Video": "",
+            "GitHub": "tbd",
+            "Demo": "tbd"
+                }
+    },
+    {
+        "category": "Business Automation",
+        "title": "Dynamic Pricing Intelligence Platform",
+        "description": "Browser automation proof-of-concept using AI agents to extract hidden dynamic pricing. Demonstrates automated data collection capabilities for price transparency.",
+        "links": {
+            "Video": "dynamic-pricing-intelligence-platform.mp4",
+            "GitHub": "tbd",
+            "Demo": "tbd"
+                }
+    }
+    ]
+    
+    # Group portfolio items by category
+    from collections import defaultdict
+    portfolio_by_category = defaultdict(list)
+    for item in portfolio:
+        portfolio_by_category[item["category"]].append(item)
+
+    return Section(
+        Div(
+            H2(
+                'Projects Portfolio',
+                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+            ),
+            P(
+                'Real demonstrations of AI solving practical business problems.',
+                cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+            ),
+            # Create sections for each category
+            *[Div(
+                # Category section with frame only (no background)
+                Div(
+                    # Category header
+                    H3(
+                        category,
+                        cls='text-xl font-semibold text-blue-800 mb-6'
+                    ),
+                    # Portfolio cards in a grid
+                    Div(
+                        *[portfolio_card(item) for item in items],
+                        cls='grid md:grid-cols-3 gap-6'
+                    ),
+                    cls='p-8 rounded-lg border border-gray-200'  # Removed bg-gray-50, kept frame
+                ),
+                cls='mb-8'
+            ) for category, items in portfolio_by_category.items()],
+            cls='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
+        ),
+        cls='py-16 bg-gray-50'  # Added bg-gray-50 to match other sections
     )
 
 def benefit_item(text):
@@ -888,7 +1149,8 @@ def home():
         app_header(),
         Main(
             section_hero(),
-            section_challenges(),
+            section_mission(),
+            section_portfolio(),
             section_products(),
             section_services(),
             section_blog()
@@ -993,4 +1255,4 @@ if __name__ == "__main__":
     sitemap()
     
     # Start server
-    serve(host='0.0.0.0', port=8080, reload=False)
+    serve(host='0.0.0.0', port=8080, reload=True)
