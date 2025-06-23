@@ -38,14 +38,22 @@ headers =   (Meta(name="robots", content="index, follow"),
                   _async=True),
             # Add the Cookiebot callback function third
             Script("""
-                window.addEventListener('CookiebotOnConsentReady', function () {
-                if (Cookiebot.consented === true) {
+            window.addEventListener('CookiebotOnConsentReady', function () {
+                if (Cookiebot.hasResponse) {
+                    // User made an explicit choice
                     gtag('consent', 'update', {
-                    'ad_storage': Cookiebot.consent.marketing ? 'granted' : 'denied',
-                    'analytics_storage': Cookiebot.consent.statistics ? 'granted' : 'denied'
+                        'ad_storage': Cookiebot.consent.marketing ? 'granted' : 'denied',
+                        'analytics_storage': Cookiebot.consent.statistics ? 'granted' : 'denied'
+                    });
+                } else if (Cookiebot.regulation === 'gdpr') {
+                    // EU user who didn't respond - deny tracking
+                    gtag('consent', 'update', {
+                        'ad_storage': 'denied',
+                        'analytics_storage': 'denied'
                     });
                 }
-                });
+                // Non-EU users keep the default 'granted' settings
+            });
             """),
             # Then Google Analytics scripts fourth
             Script(src=f"https://www.googletagmanager.com/gtag/js?id={ga_id}", _async=True),
