@@ -104,7 +104,6 @@ def app_header():
            # Navigation items on the right
            Nav(
                A('Home', href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A('Products', href='/#products', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Services', href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('About', href='/about', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Blog', href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
@@ -138,8 +137,12 @@ def section_hero():
                 # Step 1: Discover
                 Div(
                     Div(
-                        "🔍",
-                        cls='text-3xl mb-3'
+                        Img(
+                            src="/assets/images/oui--app-search-profiler.svg",
+                            alt="Discover",
+                            cls='w-12 h-12 mx-auto mb-3 text-blue-800'
+                        ),
+                        cls='text-center'
                     ),
                     H3(
                         'Discover',
@@ -154,8 +157,12 @@ def section_hero():
                 # Step 2: Validate
                 Div(
                     Div(
-                        "✅",
-                        cls='text-3xl mb-3'
+                        Img(
+                            src="/assets/images/oui--check-in-circle-empty.svg",
+                            alt="Validate",
+                            cls='w-12 h-12 mx-auto mb-3 text-blue-800'
+                        ),
+                        cls='text-center'
                     ),
                     H3(
                         'Validate',
@@ -170,8 +177,12 @@ def section_hero():
                 # Step 3: Scale
                 Div(
                     Div(
-                        "🚀",
-                        cls='text-3xl mb-3'
+                        Img(
+                            src="/assets/images/oui--rocket.svg",
+                            alt="Scale",
+                            cls='w-12 h-12 mx-auto mb-3 text-blue-800'
+                        ),
+                        cls='text-center'
                     ),
                     H3(
                         'Scale',
@@ -187,7 +198,7 @@ def section_hero():
             ),
             Div(
                 A(
-                    'Schedule Demo ',
+                    'Book a consultation ',
                     Span('→', cls='ml-2'),
                     href='/contact',
                     cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
@@ -277,11 +288,11 @@ def section_mission():
         Div(
             P(
                 'Our Mission',
-                cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+                cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
             ),
             H2(
                 'We help SMEs scaling faster and smarter with AI.',
-                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+                cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
             ),
         ),
         cls='py-16'
@@ -449,11 +460,13 @@ def section_portfolio():
         Div(
             H2(
                 'Projects Portfolio',
-                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+                #cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+                cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
             ),
             P(
                 'Real demonstrations of AI solving practical business problems.',
-                cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+                #cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+                cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
             ),
             # Create sections for each category
             *[Div(
@@ -496,230 +509,37 @@ def benefit_item(text):
         cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
     )
 
-def solution_card(title, description, benefits):
+def solution_card(title, description):
     return Div(
-        H3(title, cls='text-xl font-semibold text-blue-800 mb-4'),
-        Ul(
-            *[Li(
-                Div(
-                    # Simple blue checkmark without circle
-                    Div(
-                        "✓",
-                        cls='text-blue-500 text-lg mr-3 flex-shrink-0'
-                    ),
-                    # Benefit text
-                    Div(
-                        benefit,
-                        cls='ml-4 text-gray-900 flex-grow'
-                    ),
-                    cls='flex items-center py-2'
-                ),
-                cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
-            ) for benefit in benefits],
-            cls='space-y-2'
-        ),
-        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200'
-    )
-
-def horizontal_scroll_container(items):
-    """Create a container showing exactly three case studies"""
-    return Div(
-        # Heading for the case studies section
-        Div(
-            H3('Case Studies', cls='text-2xl font-semibold text-center mb-4'),
-            P('Real examples of how our consulting expertise has helped clients', 
-              cls='text-center text-gray-600'),
-            cls='mb-6'
-        ),
-
-        # Grid container showing exactly 3 items
-        Grid(
-            *items[:3],  # Take first 3 items
-            cols=3,      # 3 columns
-            cols_md=2,   # 2 columns on medium screens
-            cols_sm=1,   # 1 column on small screens
-            gap=4,       # Gap between cards
-            cls='max-w-6xl mx-auto'
-        ),
-        
-        cls='max-w-6xl mx-auto mt-8 mb-8 px-4'
-    )
-
-def case_study_card(title, client_type, challenge, solution, results, image_path=None):
-    """Create a case study card with consistent styling"""
-    return Card(
-        # Card content
-        Div(
-            # Optional image at top
-            Div(
-                Img(
-                    src=image_path,
-                    alt=f"{title} illustration",
-                    cls='w-full h-24 object-cover rounded-t-lg'
-                ),
-                cls='w-full overflow-hidden'
-            ) if image_path else None,
-            
-            # Content section
-            Div(
-                # Label/Client type
-                Div(
-                    client_type,
-                    cls='text-xs font-medium text-blue-700 bg-blue-100 rounded-full px-3 py-1 inline-block mb-2'
-                ),
-                
-                # Title
-                H4(title, cls='text-lg font-semibold text-gray-900 mb-2'),
-                
-                # Challenge section
-                Div(
-                    P(Span('Challenge: ', cls='font-medium text-gray-800'), cls='text-sm mb-1'),
-                    P(challenge, cls='text-sm text-gray-600 mb-2'),
-                    cls='mb-2'
-                ),
-                
-                # Solution section
-                Div(
-                    P(Span('Solution: ', cls='font-medium text-gray-800'), cls='text-sm mb-1'),
-                    P(solution, cls='text-sm text-gray-600 mb-2'),
-                    cls='mb-2'
-                ),
-                
-                # Results section
-                Div(
-                    P(Span('Results: ', cls='font-medium text-gray-800'), cls='text-sm mb-1'),
-                    P(results, cls='text-sm text-gray-600'),
-                ),
-                
-                cls='p-4'
-            ),
-        ),
-        # Using MonsterUI Card component with hover effect
-        cls='h-full transform transition-all duration-200 hover:scale-[1.02] w-full'
-    )
-
-def section_products():
-    return Section(
-        Div(
-            H2(
-                'Our Products',
-                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
-            ),
-            P(
-                'AI-powered solutions that streamline your investment process while maintaining human oversight.',
-                cls='text-center text-gray-600 mb-8 max-w-2xl mx-auto'
-            ),
-            # Product cards grid
-            Div(
-                solution_card(
-                    title='Deal Screening',
-                    description='Automated initial assessment of investment opportunities.',
-                    benefits=[
-                        "Process hundreds of web pages in minutes",
-                        "Generate comprehensive IC memos",
-                        "Quick go/no-go assessment capabilities"
-                    ]
-                ),
-                solution_card(
-                    title='Due Diligence',
-                    description='Intelligent data room analysis and thesis development.',
-                    benefits=[
-                        "Automated data extraction from data rooms",
-                        "Investment thesis development with AI",
-                        "IC report generation in minutes"
-                    ]
-                ),
-                cls='grid lg:grid-cols-2 gap-12 mt-8 max-w-6xl mx-auto'
-            ),
-            # Product CTA section
-            Div(
-                Div(
-                    H3('Ready to See Our Products in Action?', 
-                       cls='text-2xl font-semibold text-center mb-4'),
-                    P('Schedule a demo to see how our AI-powered solutions can transform your investment process.',
-                      cls='text-gray-600 text-center mb-6'),
-                    Div(
-                        A('Schedule Demo →',
-                          href='/contact',
-                          cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
-                        ),
-                        cls='text-center'
-                    ),
-                    cls='max-w-2xl mx-auto px-4'
-                ),
-                cls='border-t border-gray-200 pt-8 mt-8'
-            ),
-            cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
-        ),
-        cls='py-16 bg-gray-50', id="products"
-    )
-
-def challenge_item(title, body, tag):
-    """Template for a single challenge item with asset class tag"""
-    return Div(
-        Div(
-            # Container for title and tag with minimal spacing
-            Div(
-                # Title container that can wrap
-                Div(
-                    H3(title, 
-                       cls="text-xl font-semibold text-blue-800 pr-4"),
-                    cls="flex-grow"
-                ),
-                # Tag display with more subtle styling
-                Span(
-                    tag,
-                    cls="text-xs font-medium text-blue-600 bg-blue-50 rounded-full px-3 py-1 flex-shrink-0"
-                ),
-                cls="flex items-start justify-between"  # Removed mb-1 completely
-            ),
-            # Body with reduced top spacing
-            P(body,
-              cls="text-gray-600 mt-1 mb-4"),  # Added mt-1 for minimal space after title
-        ),
-        cls="relative hover:translate-x-1 transition-transform duration-200"
+        H3(title, cls='text-xl font-semibold text-blue-800 mb-4 text-center'),
+        P(description, cls='text-gray-600 mb-4 text-justify'),
+        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
     )
 
 def section_services():
     return Section(
         Div(
             H2(
-                'Consulting Services',
-                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+                'Services',
+                cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
             ),
             P(
-                'Drawing from successful implementations at leading private markets firms, '
-                'we offer expert guidance in three key areas:',
-                cls='text-center text-gray-600 mb-8 max-w-2xl mx-auto'
+                'We follow a systematic approach to AI implementation, designed to minimize risk and maximize impact.',
+                cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
             ),
             # Services grid - three cards
             Div(
                 solution_card(
-                    title='Investment Process Automation',
-                    description='Automate core investment activities.',
-                    benefits=[
-                        "Deal screening and due diligence automation",
-                        "Comparables analysis automation",
-                        "Asset-specific solutions (PE, Debt, RE)"
-                    ]
+                    title='Discover',
+                    description='We start by understanding your specific business challenges and operational bottlenecks. Through focused consultation, we identify where AI can create the most meaningful impact for your organization and define clear success criteria for moving forward.',
                 ),
                 solution_card(
-                    title='Operations Scaling & Efficiency',
-                    description='Scale your operations effectively.',
-                    benefits=[
-                        "Private wealth readiness",
-                        "Valuation process automation",
-                        "Service provider oversight solution"
-                    ]
+                    title='Validate',
+                    description='We build a working proof of concept tailored to your identified challenge. In 2-4 weeks, you\'ll interact with a functional AI solution addressing your specific use case, allowing you to experience the potential impact before making larger commitments.',
                 ),
                 solution_card(
-                    title='AI Transformation',
-                    description='Navigate your AI journey.',
-                    benefits=[
-                        "Strategic AI roadmap and execution",
-                        "Enterprise-wide AI adoption",
-                        "Data science team hiring and development"
-                    ]
+                    title='Scale',
+                    description='Once the proof of concept demonstrates clear value, we work with you to implement the validated solution across your organization. From solution refinement to full deployment, we ensure smooth integration with your existing processes and systems.',
                 ),
                 cls='grid md:grid-cols-3 gap-6 mt-8 max-w-6xl mx-auto'
             ),
@@ -728,7 +548,7 @@ def section_services():
                 Div(
                     H3('Looking for Expert Guidance?', 
                        cls='text-2xl font-semibold text-center mb-4'),
-                    P('Book a consultation to discuss how we can help optimize your investment process.',
+                    P('Book a consultation to discuss how we can help automate your business processes.',
                       cls='text-gray-600 text-center mb-6'),
                     Div(
                         A('Book a Consultation →',
@@ -908,7 +728,7 @@ def section_blog():
                 cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
             ),
             P(
-                'Stay updated with our latest thoughts on AI in private markets, investment automation, and industry trends.',
+                'Stay updated with our latest thoughts on AI and its implementation, and industry trends.',
                 cls='text-center text-gray-600 mb-4 max-w-2xl mx-auto'
             ),
             Div(
@@ -955,7 +775,7 @@ def blog_index():
             Div(
                 H1('Blog', cls='text-4xl font-bold text-gray-900 mb-4 text-center'),
                 P(
-                    'Explore our latest insights on AI, AI in private markets, and investment automation.',
+                    'Explore our latest insights on AI, AI implementation, and industry trends.',
                     cls='text-center text-gray-600 mb-8 max-w-2xl mx-auto'
                 ),
                 # Using a container div with negative margin
@@ -1159,7 +979,6 @@ def home():
             section_hero(),
             section_mission(),
             section_portfolio(),
-            section_products(),
             section_services(),
             section_blog()
         ),
