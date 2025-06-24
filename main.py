@@ -511,7 +511,7 @@ def benefit_item(text):
 
 def solution_card(title, description):
     return Div(
-        H3(title, cls='text-xl font-semibold text-blue-800 mb-4 text-center'),
+        H3(title, cls='text-2xl font-semibold text-blue-800 mb-4 text-center'),
         P(description, cls='text-gray-600 mb-4 text-justify'),
         cls='bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
     )
