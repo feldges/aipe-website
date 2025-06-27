@@ -13,7 +13,7 @@ Is that real?
 
 First of all, who claims that? Actually, people who claim that are often founders of AI companies, and their suite of AI influencers. The latter benefit directly from such claims, while the former benefit from exaggerating and get more clicks for their posts. We might challenge this fact.
 
-Actually, when programming myself, I very clearly see the current limits of LLMs in programming. Neutral AI influencers see it as well. Check Simon Willison's [blog](https://simonwillison.net/2025/Mar/11/using-llms-for-code/), who mentions that he uses LLMs for programming but avoids the hype around it. What he experiences is by far not what he reads on X.
+Actually, when programming myself, I realize how much more productive LLMs makes me. But I also clearly see the current limits of LLMs in programming. Neutral AI influencers see it as well. Check Simon Willison’s [blog](https://simonwillison.net/2025/Mar/11/using-llms-for-code/), who mentions that he uses LLMs for programming but avoids the hype around it. What he experiences is by far not what he reads on X.
 
 Where do these claims come from? Are these claims real? Let's check the recent research on this topic.
 
