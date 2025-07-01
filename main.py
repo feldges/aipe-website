@@ -483,7 +483,7 @@ def section_portfolio():
                     # Portfolio cards in a grid
                     Div(
                         *[portfolio_card(item) for item in items],
-                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr'
+                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 auto-rows-fr'
                     ),
                     cls='p-8 rounded-lg border border-gray-200'  # Removed bg-gray-50, kept frame
                 ),
