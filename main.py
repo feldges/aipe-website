@@ -18,7 +18,7 @@ headers =   (Meta(name="robots", content="index, follow"),
             socials,
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
-            picolink,
+            #picolink,
             # First set default consent settings to denied
             Script("""
                 window.dataLayer = window.dataLayer || [];
@@ -105,7 +105,7 @@ def app_header():
            Nav(
                A('Home', href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Services', href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A('About', href='/about', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A('About us', href='/about', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Blog', href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Contact',
                  href='/contact',
@@ -291,7 +291,7 @@ def section_mission():
                 cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
             ),
             H2(
-                'We help SMEs scaling faster and smarter with AI.',
+                'We help clients scaling faster and smarter with AI.',
                 cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
             ),
         ),
@@ -302,7 +302,7 @@ def portfolio_card(portfolio_element):
     # Create video element (either real video with thumbnail or placeholder)
     def create_video_element():
         video_filename = portfolio_element["links"]["Video"]
-        
+
         if video_filename and video_filename != "":
             # Real video exists - create video player with thumbnail poster
             thumbnail_filename = video_filename.replace('.mp4', '.png')
@@ -313,41 +313,25 @@ def portfolio_card(portfolio_element):
                     controls=True,
                     preload="metadata",
                     muted=True,  # Start without sound
-                    cls='w-full h-full rounded-lg'
+                    loading="lazy",
+                    cls='w-full h-full rounded-lg object-contain bg-gray-900'
+                    #cls='w-full h-full rounded-lg'
                 ),
-                cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
+                #cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
+                cls='w-full pb-[56.25%] relative border border-gray-300'
             )
         else:
-            # No video - create placeholder
+            # No video - use PNG placeholder
             return Div(
-                Div(
-                    # Background placeholder
-                    Div(
-                        cls='w-full h-full bg-gray-200 rounded-lg flex items-center justify-center'
-                    ),
-                    # Play button overlay
-                    Div(
-                        Img(
-                            src="/assets/images/video.svg",
-                            alt="Play video",
-                            cls='w-12 h-12 text-gray-600'
-                        ),
-                        cls='absolute inset-0 flex items-center justify-center'
-                    ),
-                    # "Coming Soon" text
-                    Div(
-                        P(
-                            "Video coming soon",
-                            cls='text-sm text-gray-500 font-medium'
-                        ),
-                        cls='absolute bottom-3 left-3'
-                    ),
-                    cls='absolute inset-0 bg-gray-200 rounded-lg overflow-hidden'
+                Img(
+                    src="/assets/videos/placeholder.png",
+                    alt="Project placeholder",
+                    cls='w-full h-full object-cover rounded-lg'
                 ),
                 cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
             )
-    
-    # Create link buttons with SVG icons
+
+    # Create link buttons with SVG icons - only if URL is not "tbd"
     def create_link_button(link_type, url, icon_src):
         return A(
             Img(
@@ -359,31 +343,40 @@ def portfolio_card(portfolio_element):
             cls='inline-block',
             **({"onclick": "return false;"} if url == "tbd" else {})
         )
-    
-    # Create the link buttons with SVG icons
-    link_buttons = [
-        create_link_button("GitHub", portfolio_element["links"]["GitHub"], "/assets/images/github.svg"),
-        create_link_button("Demo", portfolio_element["links"]["Demo"], "/assets/images/external-link.svg")
-    ]
-    
+
+    # Create the link buttons with SVG icons - only if URL is not "tbd"
+    link_buttons = []
+
+    # Add GitHub button only if GitHub URL is not "tbd"
+    if portfolio_element["links"]["GitHub"] != "tbd":
+        link_buttons.append(
+            create_link_button("GitHub", portfolio_element["links"]["GitHub"], "/assets/images/github.svg")
+        )
+
+    # Add Demo button only if Demo URL is not "tbd"
+    if portfolio_element["links"]["Demo"] != "tbd":
+        link_buttons.append(
+            create_link_button("Demo", portfolio_element["links"]["Demo"], "/assets/images/external-link.svg")
+        )
+
     return Div(
-        # Title with responsive height
+        # Title
         Div(
             H3(portfolio_element["title"], cls='text-xl font-semibold text-blue-800'),
-            cls='min-h-[4rem] lg:h-16 flex items-start'  # min-height on mobile, fixed height on large screens
+            cls='mb-3'
         ),
-        # Description with responsive height
+        # Description
         Div(
             P(
                 portfolio_element["description"],
                 *link_buttons,
                 cls='text-gray-600'
             ),
-            cls='min-h-[8rem] lg:h-32 flex items-start'  # min-height on mobile, fixed height on large screens
+            cls='mb-4 flex-grow'  # flex-grow takes available space
         ),
-        # Video element (real video or placeholder)
+        # Video element (fixed size)
         create_video_element(),
-        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200'
+        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col'  # Added h-full flex flex-col
     )
 
 def section_portfolio():
@@ -394,7 +387,7 @@ def section_portfolio():
         "description": "Extract structured financial data from CIMs with intelligent copy-paste. Numbers automatically format for Excel, text stays clean.",
         "links": {
             "Video": "cim-data-extraction-platform.mp4",
-            "GitHub": "tbd",
+            "GitHub": "https://github.com/feldges/data_extractor",
             "Demo": "tbd"
                 }
     },
@@ -403,7 +396,7 @@ def section_portfolio():
         "title": "Comprehensive PE Due Diligence Assistant",
         "description": "End-to-end due diligence automation: upload documents, extract data, run analysis, generate Word reports. Fully customizable with visual controls and user oversight at each step.",
         "links": {
-            "Video": "",
+            "Video": "comprehensive-pe-due-diligence-assistant.mp4",
             "GitHub": "tbd",
             "Demo": "tbd"
                 }
@@ -416,6 +409,16 @@ def section_portfolio():
             "Video": "m-and-a-target-research-intelligence.mp4",
             "GitHub": "tbd",
             "Demo": "tbd"
+                }
+    },
+        {
+        "category": "Investment Tools",
+        "title": "Investment Research Analyst",
+        "description": "AI-Powered investment research analyst with access to the web. Generates an investment report. Based on Stanford's STORM framework.",
+        "links": {
+            "Video": "investment-research-analyst.mp4",
+            "GitHub": "https://github.com/feldges/storm",
+            "Demo": "https://storm.aipe.tech/"
                 }
     },
     {
@@ -433,7 +436,7 @@ def section_portfolio():
         "title": "Work Smarter AI - Document Intelligence",
         "description": "AI assistant integrated into Word for document tasks. Brings AI to where people work.",
         "links": {
-            "Video": "",
+            "Video": "work-smarter-ai-document-intelligence.mp4",
             "GitHub": "tbd",
             "Demo": "tbd"
                 }
@@ -444,7 +447,7 @@ def section_portfolio():
         "description": "Browser automation proof-of-concept using AI agents to extract hidden dynamic pricing. Demonstrates automated data collection capabilities for price transparency.",
         "links": {
             "Video": "dynamic-pricing-intelligence-platform.mp4",
-            "GitHub": "tbd",
+            "GitHub": "https://github.com/feldges/price_tracker",
             "Demo": "tbd"
                 }
     }
@@ -480,7 +483,7 @@ def section_portfolio():
                     # Portfolio cards in a grid
                     Div(
                         *[portfolio_card(item) for item in items],
-                        cls='grid md:grid-cols-3 gap-6'
+                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr'
                     ),
                     cls='p-8 rounded-lg border border-gray-200'  # Removed bg-gray-50, kept frame
                 ),
@@ -614,7 +617,7 @@ def app_footer():
                         A('Home', href='/', cls='text-gray-300 hover:text-white'),
                         A('Products', href='/#products', cls='text-gray-300 hover:text-white'),
                         A('Services', href='/#services', cls='text-gray-300 hover:text-white'),
-                        A('About', href='/about', cls='text-gray-300 hover:text-white'),
+                        A('About us', href='/about', cls='text-gray-300 hover:text-white'),
                         A('Blog', href='/blog', cls='text-gray-300 hover:text-white'),
                         A('Contact', href='/contact', cls='text-gray-300 hover:text-white'),
                         cls='space-y-2 flex flex-col items-center md:items-end'
@@ -1080,6 +1083,6 @@ if __name__ == "__main__":
     # Generate sitemap
     from sitemap import sitemap
     sitemap()
-    
+
     # Start server
-    serve(host='0.0.0.0', port=8080, reload=True)
+    serve(host='0.0.0.0', port=8080, reload=False)
