@@ -10,7 +10,7 @@ load_dotenv()
 ga_id = os.getenv('GOOGLE_ANALYTICS_ID')
 cookiebot_id = os.getenv('COOKIEBOT_ID')
 
-socials = Socials(title="AIPE Technology", description="Technology Solutions for Private Markets", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
+socials = Socials(title="AIPE Technology", description="Consulting firm turning AI potential into working business solutions", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
 
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
 headers =   (Meta(name="robots", content="index, follow"),
