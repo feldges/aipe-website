@@ -69,7 +69,7 @@ headers =   (Meta(name="robots", content="index, follow"),
               "@type": "Organization",
               "name": "AIPE Technology",
               "url": "https://www.aipe.tech",
-              "description": "Technology Solutions for Private Markets",
+              "description": "Consulting firm turning AI potential into working business solutions",
               "email": "info@aipetech.com",
               "logo": "https://www.aipe.tech/assets/images/aipe_technology_screen.png",
               "sameAs": [
