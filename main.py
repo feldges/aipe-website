@@ -105,7 +105,12 @@ def app_header():
            Nav(
                A('Home', href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Services', href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A('About us', href='/about', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A(
+                   Span('About', cls='sm:hidden'),
+                   Span('About us', cls='hidden sm:inline'),
+                   href='/about', 
+                   cls='text-white hover:text-blue-200 mx-2 sm:mx-4'
+               ),
                A('Blog', href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A('Contact',
                  href='/contact',
@@ -615,7 +620,6 @@ def app_footer():
                     # Navigation section
                     Nav(
                         A('Home', href='/', cls='text-gray-300 hover:text-white'),
-                        A('Products', href='/#products', cls='text-gray-300 hover:text-white'),
                         A('Services', href='/#services', cls='text-gray-300 hover:text-white'),
                         A('About us', href='/about', cls='text-gray-300 hover:text-white'),
                         A('Blog', href='/blog', cls='text-gray-300 hover:text-white'),
