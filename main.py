@@ -3,8 +3,39 @@ import os
 import frontmatter  # you'll need to install python-frontmatter
 from dotenv import load_dotenv
 from sitemap import sitemap
+import json
 # Load environment variables
 load_dotenv()
+
+supported_locales = ["en", "de"]
+
+class Translator:
+    def __init__(self, locale="en"):
+        self.translations = self._load_locale(locale)
+        self.english = self._load_locale("en")
+
+    def _load_locale(self, locale):
+        """Load localization strings from JSON file"""
+        try:
+            with open(f'locales/{locale}.json', 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            # Fallback to English if locale file doesn't exist
+            with open('locales/en.json', 'r', encoding='utf-8') as f:
+                return json.load(f)
+
+    def t(self, key, default=""):
+        """Get translated text with English fallback"""
+        # Try current locale first
+        result = self.translations.get(key)
+        if result is not None:
+            return result
+        # Fallback to English
+        result = self.english.get(key)
+        if result is not None:
+            return result
+        # Final fallback
+        return default
 
 # Get environment variables
 ga_id = os.getenv('GOOGLE_ANALYTICS_ID')
@@ -260,7 +291,7 @@ def get_xml(fname: str):
 @app.get("/{fname:path}.{ext:static}")
 def get(fname:str, ext:str): return FileResponse(f'{fname}.{ext}')
 
-def app_header():
+def app_header(T):
    return Header(
        Div(
            # Logo on the far left
@@ -275,16 +306,16 @@ def app_header():
            ),
            # Navigation items on the right
            Nav(
-               A('Home', href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A('Services', href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A(T.t("home"), href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A(T.t("services"), href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
                A(
-                   Span('About', cls='sm:hidden'),
-                   Span('About us', cls='hidden sm:inline'),
+                   Span(T.t("about"), cls='sm:hidden'),
+                   Span(T.t("about_us"), cls='hidden sm:inline'),
                    href='/about', 
                    cls='text-white hover:text-blue-200 mx-2 sm:mx-4'
                ),
-               A('Blog', href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A('Contact',
+               A(T.t("blog"), href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
+               A(T.t("contact"),
                  href='/contact',
                  cls='bg-white text-blue-800 px-3 sm:px-4 py-1.5 rounded-lg hover:bg-blue-100 ml-2 sm:ml-4 mr-3 sm:mr-5'
                ),
@@ -295,18 +326,18 @@ def app_header():
        cls='border-b border-blue-800 bg-blue-800 w-full'
    )
 
-def section_hero():
+def section_hero(T):
     return Section(
         Div(
             H1(
-                Span('Bridging the AI adoption gap.', cls='text-blue-800'),
+                Span(T.t("hero_title"), cls='text-blue-800'),
                 cls='text-4xl font-bold sm:text-5xl mb-8 animate-fade-in'
             ),
-            P('At AIPE Technology, we show you what is possible and give you clear guidance on how to make AI part of your core business.',
+            P(T.t("hero_subtitle"),
               cls='mt-16 text-2xl text-gray-800 font-semibold mb-16 max-w-4xl animate-fade-in-delay-1'),
             P(
-                Span('Why choose us ', cls='font-semibold'),
-                'We don\'t just talk about AI possibilities - we build working proof. Here\'s how we turn your challenges into working solutions:',
+                Span(T.t("why_choose_us") + ' ', cls='font-semibold'),
+                T.t("why_choose_us_description"),
                 cls='text-xl text-gray-600 mb-24 max-w-4xl animate-fade-in-delay-2'
             ),
             # Three-step process cards
@@ -316,17 +347,17 @@ def section_hero():
                     Div(
                         Img(
                             src="/assets/images/oui--app-search-profiler.svg",
-                            alt="Discover",
+                            alt=T.t("step_1_title"),
                             cls='w-16 h-16 mx-auto mb-4 text-blue-800'
                         ),
                         cls='text-center'
                     ),
                     H3(
-                        'Discover',
+                        T.t("step_1_title"),
                         cls='text-2xl font-semibold text-blue-800 mb-3'
                     ),
                     P(
-                        'Identify where AI can create meaningful impact for your business.',
+                        T.t("step_1_description_short"),
                         cls='text-gray-600 text-lg'
                     ),
                     cls='text-center p-8 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 animate-fade-in-delay-3'
@@ -336,17 +367,17 @@ def section_hero():
                     Div(
                         Img(
                             src="/assets/images/oui--check-in-circle-empty.svg",
-                            alt="Validate",
+                            alt=T.t("step_2_title"),
                             cls='w-16 h-16 mx-auto mb-4 text-blue-800'
                         ),
                         cls='text-center'
                     ),
                     H3(
-                        'Validate',
+                        T.t("step_2_title"),
                         cls='text-2xl font-semibold text-blue-800 mb-3'
                     ),
                     P(
-                        'Build a working proof of concept for your specific challenge.',
+                        T.t("step_2_description_short"),
                         cls='text-gray-600 text-lg'
                     ),
                     cls='text-center p-8 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 animate-fade-in-delay-4'
@@ -356,17 +387,17 @@ def section_hero():
                     Div(
                         Img(
                             src="/assets/images/oui--rocket.svg",
-                            alt="Scale",
+                            alt=T.t("step_3_title"),
                             cls='w-16 h-16 mx-auto mb-4 text-blue-800'
                         ),
                         cls='text-center'
                     ),
                     H3(
-                        'Scale',
+                        T.t("step_3_title"),
                         cls='text-2xl font-semibold text-blue-800 mb-3'
                     ),
                     P(
-                        'Implement the validated solution across your organization.',
+                        T.t("step_3_description_short"),
                         cls='text-gray-600 text-lg'
                     ),
                     cls='text-center p-8 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 animate-fade-in-delay-5'
@@ -375,7 +406,7 @@ def section_hero():
             ),
             Div(
                 A(
-                    'Book a consultation ',
+                    T.t("hero_cta"),
                     Span('→', cls='ml-2'),
                     href='/contact',
                     cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
@@ -387,22 +418,22 @@ def section_hero():
         cls="py-20 bg-gray-50"
     )
 
-def section_mission():
+def section_mission(T):
     return Section(
         Div(
             P(
-                'Our Mission',
+                T.t("mission_title"),
                 cls='text-3xl text-gray-600 mb-6 max-w-2xl mx-auto text-center animate-on-scroll'
             ),
             H2(
-                'We help clients scaling faster and smarter with AI.',
+                T.t("mission_description"),
                 cls='text-5xl font-semibold text-gray-900 mb-4 text-center animate-on-scroll'
             ),
         ),
         cls='py-32', id="mission-section"
     )
 
-def portfolio_card(portfolio_element):
+def portfolio_card(portfolio_element, T):
     # Create video element (either real video with thumbnail or placeholder)
     def create_video_element():
         video_filename = portfolio_element["links"]["Video"]
@@ -429,7 +460,7 @@ def portfolio_card(portfolio_element):
             return Div(
                 Img(
                     src="/assets/videos/placeholder.png",
-                    alt="Project placeholder",
+                    alt=T.t("project_placeholder"),
                     cls='w-full h-full object-cover rounded-lg'
                 ),
                 cls='w-full pb-[50%] relative border border-gray-300'  # Reduced from pb-[56.25%] to pb-[50%]
@@ -483,12 +514,12 @@ def portfolio_card(portfolio_element):
         cls='bg-white rounded-lg p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col animate-on-scroll'  # Reduced padding from p-6 to p-5
     )
 
-def section_portfolio():
+def section_portfolio(T):
     portfolio = [
     {
-        "category": "Investment Tools",
-        "title": "CIM Data Extraction Platform",
-        "description": "Extract structured financial data from CIMs with intelligent copy-paste. Numbers automatically format for Excel, text stays clean.",
+        "category": T.t("portfolio_category_1"),
+        "title": T.t("portfolio_title_1"),
+        "description": T.t("portfolio_description_1"),
         "links": {
             "Video": "cim-data-extraction-platform.mp4",
             "GitHub": "https://github.com/feldges/data_extractor",
@@ -496,9 +527,9 @@ def section_portfolio():
                 }
     },
     {
-        "category": "Investment Tools",
-        "title": "Comprehensive PE Due Diligence Assistant",
-        "description": "End-to-end due diligence automation: upload documents, extract data, run analysis, generate Word reports. Fully customizable with visual controls and user oversight at each step.",
+        "category": T.t("portfolio_category_2"),
+        "title": T.t("portfolio_title_2"),
+        "description": T.t("portfolio_description_2"),
         "links": {
             "Video": "comprehensive-pe-due-diligence-assistant.mp4",
             "GitHub": "tbd",
@@ -506,9 +537,9 @@ def section_portfolio():
                 }
     },
     {
-        "category": "Investment Tools",
-        "title": "M&A Target Research Intelligence",
-        "description": "Automated LinkedIn research for target companies. Select roles, get curated profile lists, reorder by relevance, export to Excel. Simple interface, full user control.",
+        "category": T.t("portfolio_category_3"),
+        "title": T.t("portfolio_title_3"),
+        "description": T.t("portfolio_description_3"),
         "links": {
             "Video": "m-and-a-target-research-intelligence.mp4",
             "GitHub": "tbd",
@@ -516,9 +547,9 @@ def section_portfolio():
                 }
     },
         {
-        "category": "Investment Tools",
-        "title": "Investment Research Analyst",
-        "description": "AI-Powered investment research analyst with access to the web. Generates an investment report. Based on Stanford's STORM framework.",
+        "category": T.t("portfolio_category_4"),
+        "title": T.t("portfolio_title_4"),
+        "description": T.t("portfolio_description_4"),
         "links": {
             "Video": "investment-research-analyst.mp4",
             "GitHub": "https://github.com/feldges/storm",
@@ -526,9 +557,9 @@ def section_portfolio():
                 }
     },
     {
-        "category": "Business Automation",
-        "title": "Treasury Invoice Translation System",
-        "description": "Upload non-English invoices, view original and translated versions side-by-side, extract key data (date, amount, bank details). For centralized payment teams.",
+        "category": T.t("portfolio_category_5"),
+        "title": T.t("portfolio_title_5"),
+        "description": T.t("portfolio_description_5"),
         "links": {
             "Video": "",
             "GitHub": "tbd",
@@ -536,9 +567,9 @@ def section_portfolio():
                 }
     },
     {
-        "category": "Business Automation",
-        "title": "Work Smarter AI - Document Intelligence",
-        "description": "AI assistant seamlessly integrated into Microsoft Word for intelligent document tasks. Automates formatting, content generation, and document analysis. Brings powerful AI capabilities directly to where people work, enhancing productivity without disrupting existing workflows.",
+        "category": T.t("portfolio_category_6"),
+        "title": T.t("portfolio_title_6"),
+        "description": T.t("portfolio_description_6"),
         "links": {
             "Video": "work-smarter-ai-document-intelligence.mp4",
             "GitHub": "tbd",
@@ -546,9 +577,9 @@ def section_portfolio():
                 }
     },
     {
-        "category": "Business Automation",
-        "title": "Dynamic Pricing Intelligence Platform",
-        "description": "Browser automation proof-of-concept using AI agents to extract hidden dynamic pricing. Demonstrates automated data collection capabilities for price transparency.",
+        "category": T.t("portfolio_category_7"),
+        "title": T.t("portfolio_title_7"),
+        "description": T.t("portfolio_description_7"),
         "links": {
             "Video": "dynamic-pricing-intelligence-platform.mp4",
             "GitHub": "https://github.com/feldges/price_tracker",
@@ -566,11 +597,11 @@ def section_portfolio():
     return Section(
         Div(
             H2(
-                'Projects Portfolio',
+                T.t("portfolio_section_title"),
                 cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
             ),
             P(
-                'Real demonstrations of AI solving practical business problems.',
+                T.t("portfolio_section_description"),
                 cls='text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll'
             ),
             # Create sections for each category
@@ -584,7 +615,7 @@ def section_portfolio():
                     ),
                     # Portfolio cards in a grid
                     Div(
-                        *[portfolio_card(item) for item in items],
+                        *[portfolio_card(item, T) for item in items],
                         cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr'  # Reduced gap from gap-6 to gap-5
                     ),
                     cls='p-6 rounded-lg border border-gray-200'  # Reduced padding from p-8 to p-6
@@ -596,24 +627,6 @@ def section_portfolio():
         cls='py-16 bg-gray-50', id="portfolio-section"
     )
 
-def benefit_item(text):
-    return Li(
-        Div(
-            # Simple blue checkmark without circle
-            Div(
-                "✓",
-                cls='text-blue-500 text-lg mr-3 flex-shrink-0'  # Clean, elegant checkmark
-            ),
-            # Text content
-            Div(
-                text,
-                cls='ml-4 text-gray-900 flex-grow'
-            ),
-            cls='flex items-center py-2'
-        ),
-        cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
-    )
-
 def solution_card(title, description, animate_class=None):
     return Div(
         H3(title, cls='text-2xl font-semibold text-blue-800 mb-4 text-center'),
@@ -621,32 +634,32 @@ def solution_card(title, description, animate_class=None):
         cls=f'bg-white rounded-lg p-8 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 {animate_class if animate_class else ""}'
     )
 
-def section_services():
+def section_services(T):
     return Section(
         Div(
             H2(
-                'Services',
+                T.t("services_section_title"),
                 cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll animate-fade-in-delay-1'
             ),
             P(
-                'We follow a systematic approach to AI implementation, designed to minimize risk and maximize impact.',
+                T.t("services_section_description"),
                 cls='text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll animate-fade-in-delay-2'
             ),
             # Services grid - three cards
             Div(
                 solution_card(
-                    title='Discover',
-                    description='We start by understanding your specific business challenges and operational bottlenecks. Through focused consultation, we identify where AI can create the most meaningful impact for your organization and define clear success criteria for moving forward.',
+                    title=T.t("solution_card_1_title"),
+                    description=T.t("solution_card_1_description"),
                     animate_class='animate-on-scroll animate-fade-in-delay-3'
                 ),
                 solution_card(
-                    title='Validate',
-                    description='We build a working proof of concept tailored to your identified challenge. In 2-4 weeks, you\'ll interact with a functional AI solution addressing your specific use case, allowing you to experience the potential impact before making larger commitments.',
+                    title=T.t("solution_card_2_title"),
+                    description=T.t("solution_card_2_description"),
                     animate_class='animate-on-scroll animate-fade-in-delay-4'
                 ),
                 solution_card(
-                    title='Scale',
-                    description='Once the proof of concept demonstrates clear value, we work with you to implement the validated solution across your organization. From solution refinement to full deployment, we ensure smooth integration with your existing processes and systems.',
+                    title=T.t("solution_card_3_title"),
+                    description=T.t("solution_card_3_description"),
                     animate_class='animate-on-scroll animate-fade-in-delay-5'
                 ),
                 cls='grid md:grid-cols-3 gap-8 mt-12 max-w-7xl mx-auto'
@@ -654,12 +667,12 @@ def section_services():
             # Services CTA section
             Div(
                 Div(
-                    H3('Looking for Expert Guidance?', 
+                    H3(T.t("solution_cta_title"), 
                        cls='text-4xl font-semibold text-center mb-6 animate-on-scroll animate-fade-in-delay-6'),
-                    P('Book a consultation to discuss how we can help automate your business processes.',
+                    P(T.t("solution_cta_description"),
                       cls='text-gray-600 text-xl text-center mb-8 animate-on-scroll animate-fade-in-delay-7'),
                     Div(
-                        A('Book a Consultation →',
+                        A(T.t("solution_cta_button"),
                           href='/contact',
                           cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block animate-on-scroll animate-fade-in-delay-8'
                         ),
@@ -674,7 +687,7 @@ def section_services():
         cls='py-20 bg-white', id="services"
     )
 
-def app_footer():
+def app_footer(T):
     return Footer(
         # Main footer content
         Div(
@@ -719,11 +732,11 @@ def app_footer():
                     ),
                     # Navigation section
                     Nav(
-                        A('Home', href='/', cls='text-gray-300 hover:text-white'),
-                        A('Services', href='/#services', cls='text-gray-300 hover:text-white'),
-                        A('About us', href='/about', cls='text-gray-300 hover:text-white'),
-                        A('Blog', href='/blog', cls='text-gray-300 hover:text-white'),
-                        A('Contact', href='/contact', cls='text-gray-300 hover:text-white'),
+                        A(T.t("home"), href='/', cls='text-gray-300 hover:text-white'),
+                        A(T.t("services"), href='/#services', cls='text-gray-300 hover:text-white'),
+                        A(T.t("about_us"), href='/about', cls='text-gray-300 hover:text-white'),
+                        A(T.t("blog"), href='/blog', cls='text-gray-300 hover:text-white'),
+                        A(T.t("contact"), href='/contact', cls='text-gray-300 hover:text-white'),
                         cls='space-y-2 flex flex-col items-center md:items-end'
                     ),
                     cls='grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 pb-8'
@@ -737,11 +750,11 @@ def app_footer():
                         cls='text-gray-400 text-sm text-center md:text-left'  # Changed from text-xs to text-sm
                     ),
                     Div(
-                        A('Privacy Policy', 
+                        A(T.t("privacy_policy_title"), 
                           href='/privacy_policy', 
                           cls='text-gray-300 hover:text-white text-sm font-medium'),
                         Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
-                        A('Terms of Service', 
+                        A(T.t("terms_of_service_title"), 
                           href='/terms_of_service', 
                           cls='text-gray-300 hover:text-white text-sm font-medium'),
                         Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
@@ -758,10 +771,7 @@ def app_footer():
         cls='bg-black'
     )
 
-def app_body():
-    return H2(f"Welcome to the application")
-
-def blog_card(title, date, description, image_url, url_path, animate=False, animate_class=None):
+def blog_card(T, title, date, description, image_url, url_path, animate=False, animate_class=None):
     return Div(
         Img(
             src=image_url,
@@ -782,7 +792,7 @@ def blog_card(title, date, description, image_url, url_path, animate=False, anim
                 cls='text-gray-600 text-base line-clamp-3'
             ),
             A(
-                'Read more',
+                T.t("read_more"),
                 href=url_path,
                 cls='inline-block mt-4 text-blue-800 hover:text-blue-600 font-medium'
             ),
@@ -816,7 +826,7 @@ def get_blog_posts():
     blog_posts.sort(key=lambda x: x['date'], reverse=True)
     return blog_posts
 
-def section_blog():
+def section_blog(T):
     blog_posts = get_blog_posts()
 
     return Section(
@@ -832,6 +842,7 @@ def section_blog():
             # Blog cards container - each card gets a different animation class
             Div(
                 *[blog_card(
+                    T=T,
                     title=post['title'],
                     date=post['date'],
                     description=post['description'],
@@ -846,21 +857,25 @@ def section_blog():
     )
 
 @app.get('/blog')
-def blog_index():
+def blog_index(locale: str = "en"):
+
+    T = Translator(locale)
+
     blog_posts = get_blog_posts()
 
     return Div(
-        app_header(),
+        app_header(T),
         Section(
             Div(
-                H1('Blog', cls='text-5xl font-semibold text-gray-900 mb-6 text-center'),
+                H1(T.t("blog_page_title"), cls='text-5xl font-semibold text-gray-900 mb-6 text-center'),
                 P(
-                    'Explore our latest insights on AI, AI implementation, and industry trends.',
+                    T.t("blog_page_description"),
                     cls='text-center text-gray-600 text-3xl mb-8 max-w-3xl mx-auto'
                 ),
                 # Change to grid layout like main page
                 Div(
                     *[blog_card(
+                        T=T,
                         title=post['title'],
                         date=post['date'].strftime('%B %d, %Y') if hasattr(post['date'], 'strftime') else str(post['date']),
                         description=post['description'],
@@ -873,10 +888,10 @@ def blog_index():
             ),
             cls='py-16'
         ),
-        app_footer()
+        app_footer(T)
     )
 
-def privacy_policy_content():
+def privacy_policy_content(T):
     with open('assets/legal/privacy_policy.md', 'r') as file:
         PRIVACY_POLICY = file.read()
         return Div(
@@ -887,7 +902,7 @@ def privacy_policy_content():
             cls='py-12'  # Added vertical padding
         )
 
-def terms_of_service_content():
+def terms_of_service_content(T):
     with open('assets/legal/terms_of_service.md', 'r') as file:
         TERMS_OF_SERVICE = file.read()
         return Div(
@@ -899,29 +914,32 @@ def terms_of_service_content():
         )
 
 @app.get('/terms_of_service')
-def terms_of_service():
+def terms_of_service(locale: str = "en"):
+    T = Translator(locale)
     return Div(
-        app_header(),
-        terms_of_service_content(),
-        app_footer()
+        app_header(T),
+        terms_of_service_content(T),
+        app_footer(T)
     )
 
 @app.get('/privacy_policy')
-def privacy_policy():
+def privacy_policy(locale: str = "en"):
+    T = Translator(locale)
     return Div(
-        app_header(),
-        privacy_policy_content(),
-        app_footer()
+        app_header(T),
+        privacy_policy_content(T),
+        app_footer(T)
     )
 
 @app.get('/about')
-def about():
+def about(locale: str = "en"):
+    T = Translator(locale)
     return Div(
-        app_header(),
+        app_header(T),
         Main(
         Section(
             Div(
-                H1('About', cls='text-5xl font-semibold text-gray-900 mb-8 text-center'),  # Increased from text-4xl
+                H1(T.t("about_page_title"), cls='text-5xl font-semibold text-gray-900 mb-8 text-center'),  # Increased from text-4xl
                 # Two-column layout for desktop
                 Div(
                     # Left column with photo and quick facts
@@ -941,7 +959,7 @@ def about():
                                     Div(
                                         Img(
                                             src='/assets/images/linkedin.svg?v=2',
-                                            alt='Connect with Claude Feldges on LinkedIn',
+                                            alt=T.t("connect_with_me_on_linkedin"),
                                             cls='w-5 h-5'
                                         ),
                                         cls='text-gray-600'
@@ -959,39 +977,24 @@ def about():
                     ),
                     # Right column with detailed bio
                     Div(
-                        H3('Combining Technical Expertise with Industry Knowledge', cls='text-2xl font-semibold text-blue-800 mb-6'),  # Increased from text-xl and mb-4
+                        H3(T.t("about_page_subtitle"), cls='text-2xl font-semibold text-blue-800 mb-6'),  # Increased from text-xl and mb-4
                         P(
-                            'As a leader in applying AI technologies to private markets, '
-                            'I bridge the gap between technical implementation and '
-                            'industry-specific knowledge. With over 15 years of experience '
-                            'at Partners Group AG, a global leader and innovator in private '
-                            'markets, I combine deep industry expertise with strong '
-                            'quantitative skills from my PhD in Physics to bring a unique '
-                            'perspective to digital transformation in the private markets industry.',
+                            T.t("about_page_paragraph_1"),
                             cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
                         P(
-                            'My hands-on experience spans from building enterprise AI '
-                            'solutions to optimizing investment processes. Throughout my '
-                            'career, I\'ve successfully implemented GenAI strategies and '
-                            'developed solutions that streamline investment processes.',
+                            T.t("about_page_paragraph_2"),
                             cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
                         P(
-                            'Driven by a passion for innovation and a vision for the future '
-                            'of private markets, I left my role at Partners Group to found '
-                            'AIPE Technology. I believe in the transformative potential of '
-                            'AI to enhance investment decision-making while maintaining the '
-                            'crucial element of human judgment.',
+                            T.t("about_page_paragraph_3"),
                             cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
                         P(
-                            'At AIPE Technology, I stay at the forefront of AI innovation '
-                            'in private markets, creating solutions that generate real business value '
-                            'for investment and operational teams while maintaining human oversight.',
+                            T.t("about_page_paragraph_4"),
                             cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
-                        H3('Why Work With Me', cls='text-2xl font-semibold text-blue-800 mt-8 mb-6'),  # Increased from text-xl, mt-6 to mt-8, mb-4 to mb-6
+                        H3(T.t("why_work_with_me_title"), cls='text-2xl font-semibold text-blue-800 mt-8 mb-6'),  # Increased from text-xl, mt-6 to mt-8, mb-4 to mb-6
                         Div(
                             *[Div(
                                 Div(
@@ -1009,10 +1012,10 @@ def about():
                                 ),
                                 cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
                             ) for text in [
-                                "Practical Experience: From concept to implementation, I've built systems that drive real business value",
-                                "Private Markets Expertise: Deep understanding of investment processes, challenges, and opportunities",
-                                "Technical Depth: From data science to full-stack development, I speak both business and technology",
-                                "Education Focus: Proven track record of training technical teams and driving AI adoption"
+                                T.t("why_work_with_me_paragraph_1"),
+                                T.t("why_work_with_me_paragraph_2"),
+                                T.t("why_work_with_me_paragraph_3"),
+                                T.t("why_work_with_me_paragraph_4")
                             ]],
                             cls='mt-2'
                         ),
@@ -1023,10 +1026,10 @@ def about():
                 # Call to action
                 Div(
                     Div(
-                        P('Ready to transform your investment processes with AI?', cls='text-2xl font-medium text-center mb-6'),  # Increased from text-xl and mb-5
+                        P(T.t("cta_title_about_us"), cls='text-2xl font-medium text-center mb-6'),  # Increased from text-xl and mb-5
                         Div(
                             A(
-                                'Schedule a Consultation →',
+                                T.t("cta_about_us"),
                                 href='/contact',
                                 cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
                             ),
@@ -1041,26 +1044,31 @@ def about():
             cls='py-16 bg-white'
         ),
         ),
-        app_footer()
+        app_footer(T)
     )
 
 @app.get('/')
-def home():
+def home(locale: str = "en"):
+    # Dictionary of locale strings
+    T = Translator(locale)
+
     return Div(
-        app_header(),
+        app_header(T),
         Main(
-            section_hero(),
-            section_mission(),
-            section_portfolio(),
-            section_services(),
-            section_blog()
+            section_hero(T),
+            section_mission(T),
+            section_portfolio(T),
+            section_services(T),
+            section_blog(T)
         ),
-        app_footer()
+        app_footer(T)
         )
 
 @app.get('/blog/{url_path}')
-def blog_post(url_path: str):
+def blog_post(url_path: str, locale: str = "en"):
     # Read the markdown file
+    T=Translator(locale)
+
     blog_dir = "Blog"
     file_path = os.path.join(blog_dir, f"{url_path}.md")
 
@@ -1069,7 +1077,7 @@ def blog_post(url_path: str):
             post = frontmatter.load(f)
 
         return Div(
-            app_header(),
+            app_header(T),
             Article(
                 Div(  # Keep outer div for bg-white
                     Div(  # Keep inner div for max-width and padding
@@ -1099,39 +1107,40 @@ def blog_post(url_path: str):
                     cls='bg-white'
                 )
             ),
-            app_footer()
+            app_footer(T)
         )
     except FileNotFoundError:
         return Div(
-            app_header(),
+            app_header(T),
             Div(
                 H1("Blog Post Not Found", cls='text-4xl font-bold text-center my-12 text-gray-800'),
                 P("We couldn't find the blog post you're looking for.", cls='text-center text-gray-600'),
                 cls='max-w-3xl mx-auto px-4 py-12'
             ),
-            app_footer()
+            app_footer(T)
         )
 
 @app.get('/contact')
-def contact():
+def contact(locale: str = "en"):
+    T = Translator(locale)
     return Div(
         Div(  # Wrapper div with flex column
-            app_header(),
+            app_header(T),
             Section(
                 Div(
                     # Contact card
                     Div(
                         Div(
                             # Title and description inside the card
-                            H1('Contact Us', cls='text-5xl font-semibold text-center mb-6'),
-                            P('We\'d love to hear from you and discuss how we can help with your investment process.', 
+                            H1(T.t("contact_us_title"), cls='text-5xl font-semibold text-center mb-6'),
+                            P(T.t("contact_us_description"), 
                               cls='text-gray-600 mb-8 text-center max-w-xl mx-auto text-2xl'),
 
                             # Divider
                             Div(cls='border-t border-gray-100 mb-8'),
 
                             # Email section
-                            H2('Email Us', cls='font-medium mb-3 text-center text-2xl text-gray-700'),
+                            H2(T.t("contact_us_email_title"), cls='font-medium mb-3 text-center text-2xl text-gray-700'),
                             A('info@aipetech.com',
                               href='mailto:info@aipetech.com',
                               cls='text-blue-600 hover:text-blue-800 text-2xl font-medium block text-center hover:scale-105 transition-transform'  # Reduced from text-3xl to text-2xl
@@ -1144,7 +1153,7 @@ def contact():
                 ),
                 cls='py-20 bg-gray-50 flex-grow flex items-center'
             ),
-            app_footer(),
+            app_footer(T),
             cls='min-h-screen flex flex-col'
         )
     )
