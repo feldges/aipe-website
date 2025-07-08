@@ -13,11 +13,101 @@ cookiebot_id = os.getenv('COOKIEBOT_ID')
 socials = Socials(title="AIPE Technology", description="Consulting firm turning AI potential into working business solutions", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
 
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
+
+# Add custom CSS for animations
+custom_css = Style("""
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .animate-fade-in {
+        animation: fadeInUp 0.8s ease-out forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-1 {
+        animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-2 {
+        animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-3 {
+        animation: fadeInUp 0.8s ease-out 0.6s forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-4 {
+        animation: fadeInUp 0.8s ease-out 0.8s forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-5 {
+        animation: fadeInUp 0.8s ease-out 1.0s forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-6 {
+        animation: fadeInUp 0.8s ease-out 1.2s forwards;
+        opacity: 0;
+    }
+    
+    .animate-fade-in-delay-7 {
+        animation: fadeInUp 0.8s ease-out 1.4s forwards;
+        opacity: 0;
+    }
+    
+    /* Make animate-on-scroll elements start invisible */
+    .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    
+    .animate-on-scroll.animate-fade-in {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+    
+    .animate-on-scroll.animate-fade-in-delay-1 {
+        animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    }
+    
+    .animate-on-scroll.animate-fade-in-delay-2 {
+        animation: fadeInUp 0.8s ease-out 0.4s forwards;
+    }
+    
+    .animate-on-scroll.animate-fade-in-delay-3 {
+        animation: fadeInUp 0.8s ease-out 0.6s forwards;
+    }
+    
+    .animate-on-scroll.animate-fade-in-delay-4 {
+        animation: fadeInUp 0.8s ease-out 0.8s forwards;
+    }
+    
+    .animate-on-scroll.animate-fade-in-delay-5 {
+        animation: fadeInUp 0.8s ease-out 1.0s forwards;
+    }
+    
+    .animate-on-scroll.animate-fade-in-delay-6 {
+        animation: fadeInUp 0.8s ease-out 1.2s forwards;
+    }
+""")
+
 headers =   (Meta(name="robots", content="index, follow"),
             MarkdownJS(),
             socials,
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
             tailwind_css,
+            custom_css,
             #picolink,
             # First set default consent settings to denied
             Script("""
@@ -77,6 +167,88 @@ headers =   (Meta(name="robots", content="index, follow"),
               ]
             }
             """, type="application/ld+json"),
+            Script("""
+document.addEventListener('DOMContentLoaded', function() {
+  var mission = document.getElementById('mission-section');
+  if (!mission) return;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      mission.querySelectorAll('.animate-on-scroll').forEach(function(el, i) {
+        el.classList.add('animate-fade-in');
+        if (i === 1) el.classList.add('animate-fade-in-delay-1');
+      });
+      observer.disconnect();
+    }
+  }, { threshold: 0.3 });
+  observer.observe(mission);
+});
+"""),
+            Script("""
+document.addEventListener('DOMContentLoaded', function() {
+  var portfolio = document.getElementById('portfolio-section');
+  if (!portfolio) return;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      portfolio.querySelectorAll('.animate-on-scroll').forEach(function(el, i) {
+        el.classList.add('animate-fade-in');
+        if (i === 1) el.classList.add('animate-fade-in-delay-1');
+        if (i === 2) el.classList.add('animate-fade-in-delay-2');
+        if (i === 3) el.classList.add('animate-fade-in-delay-3');
+        if (i === 4) el.classList.add('animate-fade-in-delay-4');
+        if (i === 5) el.classList.add('animate-fade-in-delay-5');
+        if (i === 6) el.classList.add('animate-fade-in-delay-6');
+      });
+      observer.disconnect();
+    }
+  }, { threshold: 0.2 });
+  observer.observe(portfolio);
+});
+"""),
+            Script("""
+document.addEventListener('DOMContentLoaded', function() {
+  var services = document.getElementById('services');
+  if (!services) return;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      services.querySelectorAll('.animate-on-scroll').forEach(function(el, i) {
+        // Only add animation if it doesn't already have a specific delay
+        if (!el.classList.contains('animate-fade-in-delay-1') && 
+            !el.classList.contains('animate-fade-in-delay-2') && 
+            !el.classList.contains('animate-fade-in-delay-3') &&
+            !el.classList.contains('animate-fade-in-delay-4') && 
+            !el.classList.contains('animate-fade-in-delay-5') && 
+            !el.classList.contains('animate-fade-in-delay-6') &&
+            !el.classList.contains('animate-fade-in-delay-7') && 
+            !el.classList.contains('animate-fade-in-delay-8')) {
+          el.classList.add('animate-fade-in');
+        }
+      });
+      observer.disconnect();
+    }
+  }, { threshold: 0.2 });
+  observer.observe(services);
+});
+"""),
+            Script("""
+document.addEventListener('DOMContentLoaded', function() {
+  var blog = document.getElementById('blog-section');
+  if (!blog) return;
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      blog.querySelectorAll('.animate-on-scroll').forEach(function(el, i) {
+        el.classList.add('animate-fade-in');
+        if (i === 1) el.classList.add('animate-fade-in-delay-1');
+        if (i === 2) el.classList.add('animate-fade-in-delay-2');
+        if (i === 3) el.classList.add('animate-fade-in-delay-3');
+        if (i === 4) el.classList.add('animate-fade-in-delay-4');
+        if (i === 5) el.classList.add('animate-fade-in-delay-5');
+      });
+      observer.disconnect();
+    }
+  }, { threshold: 0.2 });
+  observer.observe(blog);
+});
+""")
             )
 
 app = FastHTML(hdrs=headers, title="AIPE Technology")
@@ -128,78 +300,78 @@ def section_hero():
         Div(
             H1(
                 Span('Bridging the AI adoption gap.', cls='text-blue-800'),
-                cls='text-4xl font-bold sm:text-5xl'
+                cls='text-4xl font-bold sm:text-5xl mb-8 animate-fade-in'
             ),
             P('At AIPE Technology, we show you what is possible and give you clear guidance on how to make AI part of your core business.',
-              cls='mt-4 text-2xl text-gray-800 font-semibold mb-2 max-w-4xl'),
+              cls='mt-16 text-2xl text-gray-800 font-semibold mb-16 max-w-4xl animate-fade-in-delay-1'),
             P(
                 Span('Why choose us ', cls='font-semibold'),
                 'We don\'t just talk about AI possibilities - we build working proof. Here\'s how we turn your challenges into working solutions:',
-                cls='text-xl text-gray-600 mb-4 max-w-4xl'
+                cls='text-xl text-gray-600 mb-24 max-w-4xl animate-fade-in-delay-2'
             ),
             # Three-step process cards
             Div(
-                # Step 1: Discover
+                # Step 1: Discover (Left - appears first)
                 Div(
                     Div(
                         Img(
                             src="/assets/images/oui--app-search-profiler.svg",
                             alt="Discover",
-                            cls='w-12 h-12 mx-auto mb-3 text-blue-800'
+                            cls='w-16 h-16 mx-auto mb-4 text-blue-800'
                         ),
                         cls='text-center'
                     ),
                     H3(
                         'Discover',
-                        cls='text-xl font-semibold text-blue-800 mb-2'
+                        cls='text-2xl font-semibold text-blue-800 mb-3'
                     ),
                     P(
                         'Identify where AI can create meaningful impact for your business.',
-                        cls='text-gray-600 text-base'
+                        cls='text-gray-600 text-lg'
                     ),
-                    cls='text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+                    cls='text-center p-8 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 animate-fade-in-delay-3'
                 ),
-                # Step 2: Validate
+                # Step 2: Validate (Center - appears second)
                 Div(
                     Div(
                         Img(
                             src="/assets/images/oui--check-in-circle-empty.svg",
                             alt="Validate",
-                            cls='w-12 h-12 mx-auto mb-3 text-blue-800'
+                            cls='w-16 h-16 mx-auto mb-4 text-blue-800'
                         ),
                         cls='text-center'
                     ),
                     H3(
                         'Validate',
-                        cls='text-xl font-semibold text-blue-800 mb-2'
+                        cls='text-2xl font-semibold text-blue-800 mb-3'
                     ),
                     P(
                         'Build a working proof of concept for your specific challenge.',
-                        cls='text-gray-600 text-base'
+                        cls='text-gray-600 text-lg'
                     ),
-                    cls='text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+                    cls='text-center p-8 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 animate-fade-in-delay-4'
                 ),
-                # Step 3: Scale
+                # Step 3: Scale (Right - appears third)
                 Div(
                     Div(
                         Img(
                             src="/assets/images/oui--rocket.svg",
                             alt="Scale",
-                            cls='w-12 h-12 mx-auto mb-3 text-blue-800'
+                            cls='w-16 h-16 mx-auto mb-4 text-blue-800'
                         ),
                         cls='text-center'
                     ),
                     H3(
                         'Scale',
-                        cls='text-xl font-semibold text-blue-800 mb-2'
+                        cls='text-2xl font-semibold text-blue-800 mb-3'
                     ),
                     P(
                         'Implement the validated solution across your organization.',
-                        cls='text-gray-600 text-base'
+                        cls='text-gray-600 text-lg'
                     ),
-                    cls='text-center p-6 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+                    cls='text-center p-8 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 animate-fade-in-delay-5'
                 ),
-                cls='grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mb-8'
+                cls='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mb-24'
             ),
             Div(
                 A(
@@ -208,7 +380,7 @@ def section_hero():
                     href='/contact',
                     cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
                 ),
-                cls='mt-8 text-center'
+                cls='mt-20 text-center animate-fade-in-delay-6'
             ),
             cls='max-w-5xl mx-auto px-6'
         ),
@@ -220,14 +392,14 @@ def section_mission():
         Div(
             P(
                 'Our Mission',
-                cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+                cls='text-3xl text-gray-600 mb-6 max-w-2xl mx-auto text-center animate-on-scroll'
             ),
             H2(
                 'We help clients scaling faster and smarter with AI.',
-                cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
+                cls='text-5xl font-semibold text-gray-900 mb-4 text-center animate-on-scroll'
             ),
         ),
-        cls='py-16'
+        cls='py-32', id="mission-section"
     )
 
 def portfolio_card(portfolio_element):
@@ -250,7 +422,7 @@ def portfolio_card(portfolio_element):
                     #cls='w-full h-full rounded-lg'
                 ),
                 #cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
-                cls='w-full pb-[56.25%] relative border border-gray-300'
+                cls='w-full pb-[50%] relative border border-gray-300'  # Reduced from pb-[56.25%] to pb-[50%]
             )
         else:
             # No video - use PNG placeholder
@@ -260,7 +432,7 @@ def portfolio_card(portfolio_element):
                     alt="Project placeholder",
                     cls='w-full h-full object-cover rounded-lg'
                 ),
-                cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
+                cls='w-full pb-[50%] relative border border-gray-300'  # Reduced from pb-[56.25%] to pb-[50%]
             )
 
     # Create link buttons with SVG icons - only if URL is not "tbd"
@@ -308,7 +480,7 @@ def portfolio_card(portfolio_element):
         ),
         # Video element (fixed size)
         create_video_element(),
-        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col'  # Added h-full flex flex-col
+        cls='bg-white rounded-lg p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col animate-on-scroll'  # Reduced padding from p-6 to p-5
     )
 
 def section_portfolio():
@@ -366,7 +538,7 @@ def section_portfolio():
     {
         "category": "Business Automation",
         "title": "Work Smarter AI - Document Intelligence",
-        "description": "AI assistant integrated into Word for document tasks. Brings AI to where people work.",
+        "description": "AI assistant seamlessly integrated into Microsoft Word for intelligent document tasks. Automates formatting, content generation, and document analysis. Brings powerful AI capabilities directly to where people work, enhancing productivity without disrupting existing workflows.",
         "links": {
             "Video": "work-smarter-ai-document-intelligence.mp4",
             "GitHub": "tbd",
@@ -395,13 +567,11 @@ def section_portfolio():
         Div(
             H2(
                 'Projects Portfolio',
-                #cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
-                cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
+                cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
             ),
             P(
                 'Real demonstrations of AI solving practical business problems.',
-                #cls='text-xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
-                cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+                cls='text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll'
             ),
             # Create sections for each category
             *[Div(
@@ -410,20 +580,20 @@ def section_portfolio():
                     # Category header
                     H3(
                         category,
-                        cls='text-xl font-semibold text-blue-800 mb-6'
+                        cls='text-2xl font-semibold text-blue-800 mb-8 animate-on-scroll'
                     ),
                     # Portfolio cards in a grid
                     Div(
                         *[portfolio_card(item) for item in items],
-                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 auto-rows-fr'
+                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr'  # Reduced gap from gap-6 to gap-5
                     ),
-                    cls='p-8 rounded-lg border border-gray-200'  # Removed bg-gray-50, kept frame
+                    cls='p-6 rounded-lg border border-gray-200'  # Reduced padding from p-8 to p-6
                 ),
-                cls='mb-8'
+                cls='mb-8 animate-on-scroll'
             ) for category, items in portfolio_by_category.items()],
             cls='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
         ),
-        cls='py-16 bg-gray-50'  # Added bg-gray-50 to match other sections
+        cls='py-16 bg-gray-50', id="portfolio-section"
     )
 
 def benefit_item(text):
@@ -444,11 +614,11 @@ def benefit_item(text):
         cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
     )
 
-def solution_card(title, description):
+def solution_card(title, description, animate_class=None):
     return Div(
         H3(title, cls='text-2xl font-semibold text-blue-800 mb-4 text-center'),
-        P(description, cls='text-gray-600 mb-4 text-justify'),
-        cls='bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200'
+        P(description, cls='text-gray-600 text-lg mb-4 text-justify'),
+        cls=f'bg-white rounded-lg p-8 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 {animate_class if animate_class else ""}'
     )
 
 def section_services():
@@ -456,49 +626,52 @@ def section_services():
         Div(
             H2(
                 'Services',
-                cls='text-4xl font-semibold text-gray-900 mb-4 text-center'
+                cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll animate-fade-in-delay-1'
             ),
             P(
                 'We follow a systematic approach to AI implementation, designed to minimize risk and maximize impact.',
-                cls='text-2xl text-gray-600 mb-4 max-w-2xl mx-auto text-center'
+                cls='text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll animate-fade-in-delay-2'
             ),
             # Services grid - three cards
             Div(
                 solution_card(
                     title='Discover',
                     description='We start by understanding your specific business challenges and operational bottlenecks. Through focused consultation, we identify where AI can create the most meaningful impact for your organization and define clear success criteria for moving forward.',
+                    animate_class='animate-on-scroll animate-fade-in-delay-3'
                 ),
                 solution_card(
                     title='Validate',
                     description='We build a working proof of concept tailored to your identified challenge. In 2-4 weeks, you\'ll interact with a functional AI solution addressing your specific use case, allowing you to experience the potential impact before making larger commitments.',
+                    animate_class='animate-on-scroll animate-fade-in-delay-4'
                 ),
                 solution_card(
                     title='Scale',
                     description='Once the proof of concept demonstrates clear value, we work with you to implement the validated solution across your organization. From solution refinement to full deployment, we ensure smooth integration with your existing processes and systems.',
+                    animate_class='animate-on-scroll animate-fade-in-delay-5'
                 ),
-                cls='grid md:grid-cols-3 gap-6 mt-8 max-w-6xl mx-auto'
+                cls='grid md:grid-cols-3 gap-8 mt-12 max-w-7xl mx-auto'
             ),
             # Services CTA section
             Div(
                 Div(
                     H3('Looking for Expert Guidance?', 
-                       cls='text-2xl font-semibold text-center mb-4'),
+                       cls='text-4xl font-semibold text-center mb-6 animate-on-scroll animate-fade-in-delay-6'),
                     P('Book a consultation to discuss how we can help automate your business processes.',
-                      cls='text-gray-600 text-center mb-6'),
+                      cls='text-gray-600 text-xl text-center mb-8 animate-on-scroll animate-fade-in-delay-7'),
                     Div(
                         A('Book a Consultation →',
                           href='/contact',
-                          cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
+                          cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block animate-on-scroll animate-fade-in-delay-8'
                         ),
                         cls='text-center'
                     ),
                     cls='max-w-2xl mx-auto px-4'
                 ),
-                cls='border-t border-gray-200 pt-8 mt-8'
+                cls='border-t border-gray-200 pt-12 mt-12'
             ),
-            cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
+            cls='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'
         ),
-        cls='py-16 bg-white', id="services"
+        cls='py-20 bg-white', id="services"
     )
 
 def app_footer():
@@ -588,43 +761,34 @@ def app_footer():
 def app_body():
     return H2(f"Welcome to the application")
 
-def blog_card(title, date, description, image_url, url_path):
-    return A(  # Wrap everything in an anchor tag
-        Div(
-            Div(
-                # Image container with fixed aspect ratio
-                Div(
-                    Img(
-                        src=image_url,
-                        alt=title,
-                        cls='w-full h-full object-cover'
-                    ),
-                    cls='w-full h-48 overflow-hidden'  # Fixed image height
-                ),
-                # Content container with fixed heights
-                Div(
-                    # Date at top
-                    Span(date, cls='text-sm text-blue-600 font-medium block mb-2'),
-                    # Title with increased height for three lines
-                    H3(title,
-                       cls='text-xl font-semibold text-gray-900 line-clamp-3 h-24 mb-3'),  # Height for 3 lines
-                    # Description with fixed height and increased bottom margin
-                    P(description,
-                      cls='text-gray-600 line-clamp-2 h-12 mb-6'),  # Changed mb-4 to mb-6 for more space
-                    # Read More at bottom
-                    Div(
-                        Span('Read More'),
-                        Span('→', cls='ml-1'),
-                        cls='text-blue-800 font-medium group-hover:text-blue-600 flex items-center'
-                    ),
-                    cls='p-6'
-                ),
-                cls='bg-white rounded-lg border border-gray-200'
-            ),
-            cls='p-[1px] bg-gradient-to-b from-blue-600/20 to-blue-800/20 rounded-lg'
+def blog_card(title, date, description, image_url, url_path, animate=False, animate_class=None):
+    return Div(
+        Img(
+            src=image_url,
+            alt=title,
+            cls='w-full h-48 object-cover rounded-t-lg'
         ),
-        href=f'/blog/{url_path}',
-        cls='block group transform transition-all duration-200 hover:scale-[1.02] hover:shadow-lg'
+        Div(
+            P(
+                date,
+                cls='text-sm text-gray-500 mb-2'
+            ),
+            H3(
+                title,
+                cls='text-xl font-semibold text-gray-900 mb-2 line-clamp-2'
+            ),
+            P(
+                description,
+                cls='text-gray-600 text-base line-clamp-3'
+            ),
+            A(
+                'Read more',
+                href=url_path,
+                cls='inline-block mt-4 text-blue-800 hover:text-blue-600 font-medium'
+            ),
+            cls='p-6'
+        ),
+        cls=f'bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 {animate_class if animate_class else ""}'
     )
 
 def get_blog_posts():
@@ -636,7 +800,7 @@ def get_blog_posts():
         if filename.endswith('.md'):
             with open(os.path.join(blog_dir, filename), 'r', encoding='utf-8') as f:
                 post = frontmatter.load(f)
-                url_path = filename.replace('.md', '')
+                url_path = f"/blog/{filename.replace('.md', '')}"  # Add /blog/ prefix
                 blog_posts.append({
                     'title': post.metadata.get('title', ''),
                     'date': post.metadata.get('date', ''),
@@ -659,44 +823,26 @@ def section_blog():
         Div(
             H2(
                 'Latest Insights',
-                cls='text-3xl font-semibold text-gray-900 mb-4 text-center'
+                cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
             ),
             P(
                 'Stay updated with our latest thoughts on AI and its implementation, and industry trends.',
-                cls='text-center text-gray-600 mb-4 max-w-2xl mx-auto'
+                cls='text-center text-gray-600 text-3xl mb-8 max-w-3xl mx-auto animate-on-scroll'
             ),
+            # Blog cards container - each card gets a different animation class
             Div(
-                # Blog cards container with flex layout
-                Div(
-                    Div(
-                        *[Div(
-                            blog_card(
-                                title=post['title'],
-                                date=post['date'].strftime('%B %d, %Y') if hasattr(post['date'], 'strftime') else str(post['date']),
-                                description=post['description'],
-                                image_url=post['image_url'],
-                                url_path=post['url_path']
-                            ),
-                            cls='w-full md:w-1/2 lg:w-1/3 px-4 mb-8'  # Changed to w-1/3 for large screens
-                        ) for post in blog_posts[:3]],  # Still show 4 posts
-                        cls='flex flex-wrap -mx-4'
-                    ),
-                    cls='max-w-6xl mx-auto'
-                ),
-                # View All Posts button
-                Div(
-                    A(
-                        'View All Posts →',
-                        href='/blog',
-                        cls='inline-block mt-8 px-6 py-3 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition-all transform hover:scale-105'
-                    ),
-                    cls='text-center mt-8'
-                ),
-                cls='mt-8'
+                *[blog_card(
+                    title=post['title'],
+                    date=post['date'],
+                    description=post['description'],
+                    image_url=post['image_url'],
+                    url_path=post['url_path'],
+                    animate_class=f'animate-on-scroll animate-fade-in-delay-{i+1}'  # Different delay for each card
+                ) for i, post in enumerate(blog_posts[:3])],
+                cls='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto'
             ),
-            cls='max-w-5xl mx-auto px-4 sm:px-6 lg:px-8'
         ),
-        cls='py-16 bg-gray-50'  # Added bg-gray-50 to match Products section
+        cls='py-16 bg-gray-50', id="blog-section"
     )
 
 @app.get('/blog')
@@ -707,28 +853,21 @@ def blog_index():
         app_header(),
         Section(
             Div(
-                H1('Blog', cls='text-4xl font-bold text-gray-900 mb-4 text-center'),
+                H1('Blog', cls='text-5xl font-semibold text-gray-900 mb-6 text-center'),
                 P(
                     'Explore our latest insights on AI, AI implementation, and industry trends.',
-                    cls='text-center text-gray-600 mb-8 max-w-2xl mx-auto'
+                    cls='text-center text-gray-600 text-3xl mb-8 max-w-3xl mx-auto'
                 ),
-                # Using a container div with negative margin
+                # Change to grid layout like main page
                 Div(
-                    # Using flex with percentage-based widths for Tailwind v2.2.19
-                    Div(
-                        *[Div(
-                            blog_card(
-                                title=post['title'],
-                                date=post['date'].strftime('%B %d, %Y') if hasattr(post['date'], 'strftime') else str(post['date']),
-                                description=post['description'],
-                                image_url=post['image_url'],
-                                url_path=post['url_path']
-                            ),
-                            cls='w-full md:w-1/2 lg:w-1/3 px-4 mb-8'
-                        ) for post in blog_posts],
-                        cls='flex flex-wrap -mx-4'
-                    ),
-                    cls='max-w-6xl mx-auto'
+                    *[blog_card(
+                        title=post['title'],
+                        date=post['date'].strftime('%B %d, %Y') if hasattr(post['date'], 'strftime') else str(post['date']),
+                        description=post['description'],
+                        image_url=post['image_url'],
+                        url_path=post['url_path']
+                    ) for post in blog_posts],
+                    cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'
                 ),
                 cls='px-4 sm:px-6 lg:px-8'
             ),
@@ -782,7 +921,7 @@ def about():
         Main(
         Section(
             Div(
-                H1('About', cls='text-4xl font-bold text-gray-900 mb-8 text-center'),
+                H1('About', cls='text-5xl font-semibold text-gray-900 mb-8 text-center'),  # Increased from text-4xl
                 # Two-column layout for desktop
                 Div(
                     # Left column with photo and quick facts
@@ -794,7 +933,7 @@ def about():
                         ),
                         Div(
                             P(
-                                Span('Dr. Claude Feldges', cls='font-medium block text-xl'),
+                                Span('Dr. Claude Feldges', cls='font-medium block text-2xl'),  # Increased from text-xl
                                 cls='text-center text-gray-700 mb-6'
                             ),
                             Div(
@@ -816,11 +955,11 @@ def about():
                             ),
                             cls='mb-6'
                         ),
-                        cls='w-full lg:w-1/3 px-6 mb-8 lg:mb-0 flex flex-col items-center'  # Updated classes
+                        cls='w-full lg:w-1/3 px-6 mb-8 lg:mb-0 flex flex-col items-center'
                     ),
                     # Right column with detailed bio
                     Div(
-                        H3('Combining Technical Expertise with Industry Knowledge', cls='text-xl font-semibold text-blue-800 mb-4'),
+                        H3('Combining Technical Expertise with Industry Knowledge', cls='text-2xl font-semibold text-blue-800 mb-6'),  # Increased from text-xl and mb-4
                         P(
                             'As a leader in applying AI technologies to private markets, '
                             'I bridge the gap between technical implementation and '
@@ -829,14 +968,14 @@ def about():
                             'markets, I combine deep industry expertise with strong '
                             'quantitative skills from my PhD in Physics to bring a unique '
                             'perspective to digital transformation in the private markets industry.',
-                            cls='text-gray-700 mb-4'
+                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
                         P(
                             'My hands-on experience spans from building enterprise AI '
                             'solutions to optimizing investment processes. Throughout my '
                             'career, I\'ve successfully implemented GenAI strategies and '
                             'developed solutions that streamline investment processes.',
-                            cls='text-gray-700 mb-4'
+                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
                         P(
                             'Driven by a passion for innovation and a vision for the future '
@@ -844,29 +983,29 @@ def about():
                             'AIPE Technology. I believe in the transformative potential of '
                             'AI to enhance investment decision-making while maintaining the '
                             'crucial element of human judgment.',
-                            cls='text-gray-700 mb-4'
+                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
                         P(
                             'At AIPE Technology, I stay at the forefront of AI innovation '
                             'in private markets, creating solutions that generate real business value '
                             'for investment and operational teams while maintaining human oversight.',
-                            cls='text-gray-700 mb-4'
+                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
                         ),
-                        H3('Why Work With Me', cls='text-xl font-semibold text-blue-800 mt-6 mb-4'),
+                        H3('Why Work With Me', cls='text-2xl font-semibold text-blue-800 mt-8 mb-6'),  # Increased from text-xl, mt-6 to mt-8, mb-4 to mb-6
                         Div(
                             *[Div(
                                 Div(
                                     # Simple blue checkmark without circle
                                     Div(
                                         "✓",
-                                        cls='text-blue-500 text-lg mr-3 flex-shrink-0'
+                                        cls='text-blue-500 text-xl mr-3 flex-shrink-0'  # Increased from text-lg
                                     ),
                                     # Point text
                                     Div(
                                         text,
-                                        cls='ml-4 text-gray-900 flex-grow'
+                                        cls='ml-4 text-gray-900 flex-grow text-lg'  # Added text-lg
                                     ),
-                                    cls='flex items-center py-2'
+                                    cls='flex items-center py-3'  # Increased from py-2
                                 ),
                                 cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
                             ) for text in [
@@ -884,7 +1023,7 @@ def about():
                 # Call to action
                 Div(
                     Div(
-                        P('Ready to transform your investment processes with AI?', cls='text-xl font-medium text-center mb-5'),
+                        P('Ready to transform your investment processes with AI?', cls='text-2xl font-medium text-center mb-6'),  # Increased from text-xl and mb-5
                         Div(
                             A(
                                 'Schedule a Consultation →',
@@ -984,26 +1123,26 @@ def contact():
                     Div(
                         Div(
                             # Title and description inside the card
-                            H1('Contact Us', cls='text-3xl font-bold text-center mb-4'),
+                            H1('Contact Us', cls='text-5xl font-semibold text-center mb-6'),
                             P('We\'d love to hear from you and discuss how we can help with your investment process.', 
-                              cls='text-gray-600 mb-8 text-center max-w-xl mx-auto'),
+                              cls='text-gray-600 mb-8 text-center max-w-xl mx-auto text-2xl'),
 
                             # Divider
                             Div(cls='border-t border-gray-100 mb-8'),
 
                             # Email section
-                            H2('Email Us', cls='font-medium mb-3 text-center text-lg text-gray-700'),
+                            H2('Email Us', cls='font-medium mb-3 text-center text-2xl text-gray-700'),
                             A('info@aipetech.com',
                               href='mailto:info@aipetech.com',
-                              cls='text-blue-600 hover:text-blue-800 text-xl font-medium block text-center hover:scale-105 transition-transform'
+                              cls='text-blue-600 hover:text-blue-800 text-2xl font-medium block text-center hover:scale-105 transition-transform'  # Reduced from text-3xl to text-2xl
                             ),
                             cls='text-center'
                         ),
                         cls='bg-white rounded-lg shadow-lg p-10 max-w-2xl mx-auto border border-gray-100'
                     ),
-                    cls='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-full'  # Added flex and height
+                    cls='max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-full'
                 ),
-                cls='py-20 bg-gray-50 flex-grow flex items-center'  # Added flex and items-center
+                cls='py-20 bg-gray-50 flex-grow flex items-center'
             ),
             app_footer(),
             cls='min-h-screen flex flex-col'
