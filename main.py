@@ -7,7 +7,24 @@ import json
 # Load environment variables
 load_dotenv()
 
-supported_locales = ["en", "de"]
+supported_locales = ["en"] #, "de"]
+
+def detect_locale(request):
+    saved_locale = request.cookies.get('user_lang')
+    if saved_locale:
+        if is_valid_locale(saved_locale):
+            return saved_locale
+        else:
+            return "en"
+    else:
+        browser_locale = request.headers.get('accept-language', 'en').split(',')[0].split('-')[0]
+        if is_valid_locale(browser_locale):
+            return browser_locale
+        else:
+            return "en"
+
+def is_valid_locale(locale):
+    return locale in supported_locales
 
 class Translator:
     def __init__(self, locale="en"):
@@ -36,6 +53,18 @@ class Translator:
             return result
         # Final fallback
         return default
+
+def check_cookie_consent(request: Request) -> bool:
+    """Check if we can set cookies based on existing consent"""
+    # Check if user has given consent via cookie
+    consent_given = request.cookies.get('CookieConsent', 'false').lower() == 'true'
+    print(f"Cookie consent: {consent_given}")
+
+    # If no consent cookie exists, assume allowed (non-EU user)
+    if 'CookieConsent' not in request.cookies:
+        return True  # Assume consent for non-EU users
+
+    return consent_given
 
 # Get environment variables
 ga_id = os.getenv('GOOGLE_ANALYTICS_ID')
@@ -423,11 +452,11 @@ def section_mission(T):
         Div(
             P(
                 T.t("mission_title"),
-                cls='text-3xl text-gray-600 mb-6 max-w-2xl mx-auto text-center animate-on-scroll'
+                cls='text-2xl sm:text-3xl text-gray-600 mb-6 max-w-2xl mx-auto text-center animate-on-scroll'
             ),
             H2(
                 T.t("mission_description"),
-                cls='text-5xl font-semibold text-gray-900 mb-4 text-center animate-on-scroll'
+                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-4 text-center animate-on-scroll'
             ),
         ),
         cls='py-32', id="mission-section"
@@ -598,11 +627,11 @@ def section_portfolio(T):
         Div(
             H2(
                 T.t("portfolio_section_title"),
-                cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
+                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'  # Just reduced from text-5xl to text-4xl sm:text-5xl
             ),
             P(
                 T.t("portfolio_section_description"),
-                cls='text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll'
+                cls='text-2xl sm:text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll'  # Just reduced from text-3xl to text-2xl sm:text-3xl
             ),
             # Create sections for each category
             *[Div(
@@ -611,20 +640,20 @@ def section_portfolio(T):
                     # Category header
                     H3(
                         category,
-                        cls='text-2xl font-semibold text-blue-800 mb-8 animate-on-scroll'
+                        cls='text-xl sm:text-2xl font-semibold text-blue-800 mb-8 animate-on-scroll'  # Just reduced from text-2xl to text-xl sm:text-2xl
                     ),
                     # Portfolio cards in a grid
                     Div(
                         *[portfolio_card(item, T) for item in items],
-                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr'  # Reduced gap from gap-6 to gap-5
+                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr'  # Keep existing grid
                     ),
-                    cls='p-6 rounded-lg border border-gray-200'  # Reduced padding from p-8 to p-6
+                    cls='p-6 rounded-lg border border-gray-200'  # Keep existing padding
                 ),
                 cls='mb-8 animate-on-scroll'
             ) for category, items in portfolio_by_category.items()],
-            cls='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'
+            cls='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'  # Keep existing max-width
         ),
-        cls='py-16 bg-gray-50', id="portfolio-section"
+        cls='py-16 bg-gray-50', id="portfolio-section"  # Keep existing padding
     )
 
 def solution_card(title, description, animate_class=None):
@@ -639,11 +668,11 @@ def section_services(T):
         Div(
             H2(
                 T.t("services_section_title"),
-                cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll animate-fade-in-delay-1'
+                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll animate-fade-in-delay-1'
             ),
             P(
                 T.t("services_section_description"),
-                cls='text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll animate-fade-in-delay-2'
+                cls='text-2xl sm:text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll animate-fade-in-delay-2'
             ),
             # Services grid - three cards
             Div(
@@ -668,9 +697,9 @@ def section_services(T):
             Div(
                 Div(
                     H3(T.t("solution_cta_title"), 
-                       cls='text-4xl font-semibold text-center mb-6 animate-on-scroll animate-fade-in-delay-6'),
+                       cls='text-3xl sm:text-4xl font-semibold text-center mb-6 animate-on-scroll animate-fade-in-delay-6'),
                     P(T.t("solution_cta_description"),
-                      cls='text-gray-600 text-xl text-center mb-8 animate-on-scroll animate-fade-in-delay-7'),
+                      cls='text-gray-600 text-lg sm:text-xl text-center mb-8 animate-on-scroll animate-fade-in-delay-7'),
                     Div(
                         A(T.t("solution_cta_button"),
                           href='/contact',
@@ -833,11 +862,11 @@ def section_blog(T):
         Div(
             H2(
                 'Latest Insights',
-                cls='text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
+                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
             ),
             P(
                 'Stay updated with our latest thoughts on AI and its implementation, and industry trends.',
-                cls='text-center text-gray-600 text-3xl mb-8 max-w-3xl mx-auto animate-on-scroll'
+                cls='text-center text-gray-600 text-2xl sm:text-3xl mb-8 max-w-3xl mx-auto animate-on-scroll'
             ),
             # Blog cards container - each card gets a different animation class
             Div(
@@ -857,7 +886,9 @@ def section_blog(T):
     )
 
 @app.get('/blog')
-def blog_index(locale: str = "en"):
+def blog_index(request: Request):
+
+    locale = detect_locale(request)
 
     T = Translator(locale)
 
@@ -914,7 +945,9 @@ def terms_of_service_content(T):
         )
 
 @app.get('/terms_of_service')
-def terms_of_service(locale: str = "en"):
+def terms_of_service(request: Request):
+    locale = detect_locale(request)
+
     T = Translator(locale)
     return Div(
         app_header(T),
@@ -923,7 +956,9 @@ def terms_of_service(locale: str = "en"):
     )
 
 @app.get('/privacy_policy')
-def privacy_policy(locale: str = "en"):
+def privacy_policy(request: Request):
+    locale = detect_locale(request)
+
     T = Translator(locale)
     return Div(
         app_header(T),
@@ -932,7 +967,9 @@ def privacy_policy(locale: str = "en"):
     )
 
 @app.get('/about')
-def about(locale: str = "en"):
+def about(request: Request):
+    locale = detect_locale(request)
+
     T = Translator(locale)
     return Div(
         app_header(T),
@@ -1048,7 +1085,9 @@ def about(locale: str = "en"):
     )
 
 @app.get('/')
-def home(locale: str = "en"):
+def home(request: Request):
+
+    locale = detect_locale(request)
     # Dictionary of locale strings
     T = Translator(locale)
 
@@ -1065,7 +1104,10 @@ def home(locale: str = "en"):
         )
 
 @app.get('/blog/{url_path}')
-def blog_post(url_path: str, locale: str = "en"):
+def blog_post(request: Request, url_path: str):
+
+    locale = detect_locale(request)
+
     # Read the markdown file
     T=Translator(locale)
 
@@ -1121,7 +1163,10 @@ def blog_post(url_path: str, locale: str = "en"):
         )
 
 @app.get('/contact')
-def contact(locale: str = "en"):
+def contact(request: Request):
+
+    locale = detect_locale(request)
+
     T = Translator(locale)
     return Div(
         Div(  # Wrapper div with flex column
