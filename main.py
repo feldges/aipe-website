@@ -530,7 +530,7 @@ def portfolio_card(portfolio_element, T):
     return Div(
         # Title
         Div(
-            H3(portfolio_element["title"], cls='text-base sm:text-lg lg:text-xl font-semibold text-blue-800'),  # Larger on mobile
+            H3(portfolio_element["title"], cls='text-xl font-semibold text-blue-800 mb-0'),  # Reduced from text-2xl to text-xl
             cls='mb-2 sm:mb-3'
         ),
         # Description
@@ -538,13 +538,13 @@ def portfolio_card(portfolio_element, T):
             P(
                 portfolio_element["description"],
                 *link_buttons,
-                cls='text-sm sm:text-base text-gray-600'  # Larger on mobile
+                cls='text-gray-600 text-base mb-4 text-justify'  # Reduced from text-lg to text-base
             ),
             cls='mb-3 sm:mb-4 flex-grow'
         ),
         # Video element (responsive height)
         create_video_element(),
-        cls='bg-white rounded-lg p-2 sm:p-3 lg:p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col animate-on-scroll'  # Back to normal padding
+        cls='bg-white rounded-lg p-2 sm:p-3 lg:p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col animate-on-scroll'
     )
 
 def section_portfolio(T):
@@ -707,7 +707,7 @@ def section_services(T):
                     Div(
                         A(T.t("solution_cta_button"),
                           href='/contact',
-                          cls='bg-blue-800 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-900 transition-all transform hover:scale-105 inline-block border-2 border-blue-800 shadow-lg text-lg animate-on-scroll'  # Removed animate-fade-in-delay-8
+                          cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block animate-on-scroll'
                         ),
                         cls='text-center'
                     ),
@@ -885,6 +885,7 @@ def section_blog(T):
                 ) for i, post in enumerate(blog_posts[:3])],
                 cls='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto'
             ),
+            cls='px-4 sm:px-6 lg:px-8'  # Add responsive horizontal padding
         ),
         cls='py-16 bg-gray-50', id="blog-section"
     )
@@ -980,7 +981,7 @@ def about(request: Request):
         Main(
         Section(
             Div(
-                H1(T.t("about_page_title"), cls='text-5xl font-semibold text-gray-900 mb-8 text-center'),  # Increased from text-4xl
+                H1(T.t("about_page_title"), cls='text-5xl font-semibold text-gray-900 mb-8 text-center'),
                 # Two-column layout for desktop
                 Div(
                     # Left column with photo and quick facts
@@ -992,7 +993,7 @@ def about(request: Request):
                         ),
                         Div(
                             P(
-                                Span('Dr. Claude Feldges', cls='font-medium block text-2xl'),  # Increased from text-xl
+                                Span('Dr. Claude Feldges', cls='font-medium block text-2xl'),
                                 cls='text-center text-gray-700 mb-6'
                             ),
                             Div(
@@ -1018,38 +1019,38 @@ def about(request: Request):
                     ),
                     # Right column with detailed bio
                     Div(
-                        H3(T.t("about_page_subtitle"), cls='text-2xl font-semibold text-blue-800 mb-6'),  # Increased from text-xl and mb-4
+                        H3(T.t("about_page_subtitle"), cls='text-2xl font-semibold text-blue-800 mb-6'),
                         P(
                             T.t("about_page_paragraph_1"),
-                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
+                            cls='text-gray-700 mb-6 text-lg text-justify'
                         ),
                         P(
                             T.t("about_page_paragraph_2"),
-                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
+                            cls='text-gray-700 mb-6 text-lg text-justify'
                         ),
                         P(
                             T.t("about_page_paragraph_3"),
-                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
+                            cls='text-gray-700 mb-6 text-lg text-justify'
                         ),
                         P(
                             T.t("about_page_paragraph_4"),
-                            cls='text-gray-700 mb-6 text-lg'  # Increased from mb-4 and added text-lg
+                            cls='text-gray-700 mb-6 text-lg text-justify'
                         ),
-                        H3(T.t("why_work_with_me_title"), cls='text-2xl font-semibold text-blue-800 mt-8 mb-6'),  # Increased from text-xl, mt-6 to mt-8, mb-4 to mb-6
+                        H3(T.t("why_work_with_me_title"), cls='text-2xl font-semibold text-blue-800 mt-8 mb-6'),
                         Div(
                             *[Div(
                                 Div(
                                     # Simple blue checkmark without circle
                                     Div(
                                         "✓",
-                                        cls='text-blue-500 text-xl mr-3 flex-shrink-0'  # Increased from text-lg
+                                        cls='text-blue-500 text-xl mr-3 flex-shrink-0'
                                     ),
                                     # Point text
                                     Div(
                                         text,
-                                        cls='ml-4 text-gray-900 flex-grow text-lg'  # Added text-lg
+                                        cls='ml-4 text-gray-900 flex-grow text-lg text-justify'
                                     ),
-                                    cls='flex items-center py-3'  # Increased from py-2
+                                    cls='flex items-center py-3'
                                 ),
                                 cls='transform transition-transform duration-200 hover:translate-x-2 list-none'
                             ) for text in [
@@ -1067,7 +1068,7 @@ def about(request: Request):
                 # Call to action
                 Div(
                     Div(
-                        P(T.t("cta_title_about_us"), cls='text-2xl font-medium text-center mb-6'),  # Increased from text-xl and mb-5
+                        P(T.t("cta_title_about_us"), cls='text-2xl font-medium text-center mb-6'),
                         Div(
                             A(
                                 T.t("cta_about_us"),
