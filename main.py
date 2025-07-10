@@ -703,7 +703,7 @@ def section_services(T):
                     Div(
                         A(T.t("solution_cta_button"),
                           href='/contact',
-                          cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block animate-on-scroll animate-fade-in-delay-8'
+                          cls='bg-blue-800 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-900 transition-all transform hover:scale-105 inline-block border-2 border-blue-800 shadow-lg text-lg animate-on-scroll'
                         ),
                         cls='text-center'
                     ),
