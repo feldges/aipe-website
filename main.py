@@ -160,6 +160,12 @@ custom_css = Style("""
     .animate-on-scroll.animate-fade-in-delay-6 {
         animation: fadeInUp 0.8s ease-out 1.2s forwards;
     }
+
+    .animate-on-scroll.animate-fade-in-delay-7 {
+        animation: fadeInUp 0.8s ease-out 1.4s forwards;
+    }
+    
+    
 """)
 
 headers =   (Meta(name="robots", content="index, follow"),
@@ -243,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
   observer.observe(mission);
 });
 """),
+            # Update the portfolio JavaScript to trigger earlier
             Script("""
 document.addEventListener('DOMContentLoaded', function() {
   var portfolio = document.getElementById('portfolio-section');
@@ -260,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       observer.disconnect();
     }
-  }, { threshold: 0.2 });
+  }, { threshold: 0.1 });
   observer.observe(portfolio);
 });
 """),
@@ -271,17 +278,15 @@ document.addEventListener('DOMContentLoaded', function() {
   var observer = new IntersectionObserver(function(entries) {
     if (entries[0].isIntersecting) {
       services.querySelectorAll('.animate-on-scroll').forEach(function(el, i) {
-        // Only add animation if it doesn't already have a specific delay
-        if (!el.classList.contains('animate-fade-in-delay-1') && 
-            !el.classList.contains('animate-fade-in-delay-2') && 
-            !el.classList.contains('animate-fade-in-delay-3') &&
-            !el.classList.contains('animate-fade-in-delay-4') && 
-            !el.classList.contains('animate-fade-in-delay-5') && 
-            !el.classList.contains('animate-fade-in-delay-6') &&
-            !el.classList.contains('animate-fade-in-delay-7') && 
-            !el.classList.contains('animate-fade-in-delay-8')) {
-          el.classList.add('animate-fade-in');
-        }
+        el.classList.add('animate-fade-in');
+        if (i === 1) el.classList.add('animate-fade-in-delay-1');
+        if (i === 2) el.classList.add('animate-fade-in-delay-2');
+        if (i === 3) el.classList.add('animate-fade-in-delay-3');
+        if (i === 4) el.classList.add('animate-fade-in-delay-4');
+        if (i === 5) el.classList.add('animate-fade-in-delay-5');
+        if (i === 6) el.classList.add('animate-fade-in-delay-6');
+        if (i === 7) el.classList.add('animate-fade-in-delay-7');
+        if (i === 8) el.classList.add('animate-fade-in-delay-8');
       });
       observer.disconnect();
     }
@@ -458,8 +463,9 @@ def section_mission(T):
                 T.t("mission_description"),
                 cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-4 text-center animate-on-scroll'
             ),
+            cls='px-4 sm:px-6 lg:px-8'  # Add horizontal padding for iPhone SE
         ),
-        cls='py-32', id="mission-section"
+        cls='py-16 sm:py-24 lg:py-32', id="mission-section"  # Make vertical padding responsive
     )
 
 def portfolio_card(portfolio_element, T):
@@ -479,10 +485,8 @@ def portfolio_card(portfolio_element, T):
                     muted=True,  # Start without sound
                     loading="lazy",
                     cls='w-full h-full rounded-lg object-contain bg-gray-900'
-                    #cls='w-full h-full rounded-lg'
                 ),
-                #cls='w-full pb-[56.25%] relative border border-gray-300'  # Added border
-                cls='w-full pb-[50%] relative border border-gray-300'  # Reduced from pb-[56.25%] to pb-[50%]
+                cls='w-full pb-[30%] sm:pb-[35%] relative border border-gray-300'  # More reasonable height
             )
         else:
             # No video - use PNG placeholder
@@ -492,7 +496,7 @@ def portfolio_card(portfolio_element, T):
                     alt=T.t("project_placeholder"),
                     cls='w-full h-full object-cover rounded-lg'
                 ),
-                cls='w-full pb-[50%] relative border border-gray-300'  # Reduced from pb-[56.25%] to pb-[50%]
+                cls='w-full pb-[20%] relative border border-gray-300'  # Reduced from pb-[50%] to pb-[35%] for iPhone
             )
 
     # Create link buttons with SVG icons - only if URL is not "tbd"
@@ -526,21 +530,21 @@ def portfolio_card(portfolio_element, T):
     return Div(
         # Title
         Div(
-            H3(portfolio_element["title"], cls='text-xl font-semibold text-blue-800'),
-            cls='mb-3'
+            H3(portfolio_element["title"], cls='text-base sm:text-lg lg:text-xl font-semibold text-blue-800'),  # Larger on mobile
+            cls='mb-2 sm:mb-3'
         ),
         # Description
         Div(
             P(
                 portfolio_element["description"],
                 *link_buttons,
-                cls='text-gray-600'
+                cls='text-sm sm:text-base text-gray-600'  # Larger on mobile
             ),
-            cls='mb-4 flex-grow'  # flex-grow takes available space
+            cls='mb-3 sm:mb-4 flex-grow'
         ),
-        # Video element (fixed size)
+        # Video element (responsive height)
         create_video_element(),
-        cls='bg-white rounded-lg p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col animate-on-scroll'  # Reduced padding from p-6 to p-5
+        cls='bg-white rounded-lg p-2 sm:p-3 lg:p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 h-full flex flex-col animate-on-scroll'  # Back to normal padding
     )
 
 def section_portfolio(T):
@@ -627,11 +631,11 @@ def section_portfolio(T):
         Div(
             H2(
                 T.t("portfolio_section_title"),
-                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'  # Just reduced from text-5xl to text-4xl sm:text-5xl
+                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-4 sm:mb-6 text-center animate-on-scroll'  # Aligned with mission section
             ),
             P(
                 T.t("portfolio_section_description"),
-                cls='text-2xl sm:text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll'  # Just reduced from text-3xl to text-2xl sm:text-3xl
+                cls='text-2xl sm:text-3xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto text-center animate-on-scroll'  # Aligned with mission section
             ),
             # Create sections for each category
             *[Div(
@@ -640,20 +644,20 @@ def section_portfolio(T):
                     # Category header
                     H3(
                         category,
-                        cls='text-xl sm:text-2xl font-semibold text-blue-800 mb-8 animate-on-scroll'  # Just reduced from text-2xl to text-xl sm:text-2xl
+                        cls='text-xl sm:text-2xl font-semibold text-blue-800 mb-4 sm:mb-8 animate-on-scroll'  # Aligned with other sections
                     ),
                     # Portfolio cards in a grid
                     Div(
                         *[portfolio_card(item, T) for item in items],
-                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 auto-rows-fr'  # Keep existing grid
+                        cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-5 auto-rows-fr'  # Back to normal gaps
                     ),
-                    cls='p-6 rounded-lg border border-gray-200'  # Keep existing padding
+                    cls='p-3 sm:p-6 rounded-lg border border-gray-200'  # Back to normal padding
                 ),
-                cls='mb-8 animate-on-scroll'
+                cls='mb-6 sm:mb-8 animate-on-scroll'  # Back to normal margins
             ) for category, items in portfolio_by_category.items()],
-            cls='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'  # Keep existing max-width
+            cls='max-w-4xl sm:max-w-6xl mx-auto px-2 sm:px-4 lg:px-8'  # Keep responsive max-width
         ),
-        cls='py-16 bg-gray-50', id="portfolio-section"  # Keep existing padding
+        cls='py-12 sm:py-16 bg-gray-50', id="portfolio-section"  # Back to normal padding
     )
 
 def solution_card(title, description, animate_class=None):
@@ -668,28 +672,28 @@ def section_services(T):
         Div(
             H2(
                 T.t("services_section_title"),
-                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll animate-fade-in-delay-1'
+                cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'  # Removed animate-fade-in-delay-1
             ),
             P(
                 T.t("services_section_description"),
-                cls='text-2xl sm:text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll animate-fade-in-delay-2'
+                cls='text-2xl sm:text-3xl text-gray-600 mb-8 max-w-3xl mx-auto text-center animate-on-scroll'  # Removed animate-fade-in-delay-2
             ),
             # Services grid - three cards
             Div(
                 solution_card(
                     title=T.t("solution_card_1_title"),
                     description=T.t("solution_card_1_description"),
-                    animate_class='animate-on-scroll animate-fade-in-delay-3'
+                    animate_class='animate-on-scroll'  # Removed animate-fade-in-delay-3
                 ),
                 solution_card(
                     title=T.t("solution_card_2_title"),
                     description=T.t("solution_card_2_description"),
-                    animate_class='animate-on-scroll animate-fade-in-delay-4'
+                    animate_class='animate-on-scroll'  # Removed animate-fade-in-delay-4
                 ),
                 solution_card(
                     title=T.t("solution_card_3_title"),
                     description=T.t("solution_card_3_description"),
-                    animate_class='animate-on-scroll animate-fade-in-delay-5'
+                    animate_class='animate-on-scroll'  # Removed animate-fade-in-delay-5
                 ),
                 cls='grid md:grid-cols-3 gap-8 mt-12 max-w-7xl mx-auto'
             ),
@@ -697,13 +701,13 @@ def section_services(T):
             Div(
                 Div(
                     H3(T.t("solution_cta_title"), 
-                       cls='text-3xl sm:text-4xl font-semibold text-center mb-6 animate-on-scroll animate-fade-in-delay-6'),
+                       cls='text-3xl sm:text-4xl font-semibold text-center mb-6 animate-on-scroll'),
                     P(T.t("solution_cta_description"),
-                      cls='text-gray-600 text-lg sm:text-xl text-center mb-8 animate-on-scroll animate-fade-in-delay-7'),
+                      cls='text-gray-600 text-lg sm:text-xl text-center mb-8 animate-on-scroll'),
                     Div(
                         A(T.t("solution_cta_button"),
                           href='/contact',
-                          cls='bg-blue-800 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-900 transition-all transform hover:scale-105 inline-block border-2 border-blue-800 shadow-lg text-lg animate-on-scroll'
+                          cls='bg-blue-800 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-900 transition-all transform hover:scale-105 inline-block border-2 border-blue-800 shadow-lg text-lg animate-on-scroll'  # Removed animate-fade-in-delay-8
                         ),
                         cls='text-center'
                     ),
@@ -868,7 +872,7 @@ def section_blog(T):
                 'Stay updated with our latest thoughts on AI and its implementation, and industry trends.',
                 cls='text-center text-gray-600 text-2xl sm:text-3xl mb-8 max-w-3xl mx-auto animate-on-scroll'
             ),
-            # Blog cards container - each card gets a different animation class
+            # Blog cards container - use standardized approach
             Div(
                 *[blog_card(
                     T=T,
@@ -877,7 +881,7 @@ def section_blog(T):
                     description=post['description'],
                     image_url=post['image_url'],
                     url_path=post['url_path'],
-                    animate_class=f'animate-on-scroll animate-fade-in-delay-{i+1}'  # Different delay for each card
+                    animate_class='animate-on-scroll'
                 ) for i, post in enumerate(blog_posts[:3])],
                 cls='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto'
             ),
