@@ -7,24 +7,27 @@ import json
 # Load environment variables
 load_dotenv()
 
-supported_locales = ["en"] #, "de"]
+supported_locales = ["en", "de"]
 
-def detect_locale(request):
-    saved_locale = request.cookies.get('user_lang')
+def detect_locale(request, session):
+    saved_locale = session.get('user_lang')
     if saved_locale:
-        if is_valid_locale(saved_locale):
-            return saved_locale
-        else:
-            return "en"
+        return saved_locale
     else:
         browser_locale = request.headers.get('accept-language', 'en').split(',')[0].split('-')[0]
-        if is_valid_locale(browser_locale):
+        if browser_locale:
             return browser_locale
         else:
-            return "en"
+            return "en" # fallback to English if no locale is detected
 
 def is_valid_locale(locale):
     return locale in supported_locales
+
+def modified_locale(locale):
+    if locale == 'en':
+        return ''
+    else:
+        return f'/{locale}'
 
 class Translator:
     def __init__(self, locale="en"):
@@ -53,6 +56,23 @@ class Translator:
             return result
         # Final fallback
         return default
+
+def locale_selector(current_page):
+    # Build URLs that preserve current page
+    if current_page == "home":
+        en_href = "/"
+        de_href = "/de/"
+    else:
+        en_href = f"/{current_page}"
+        de_href = f"/de/{current_page}"
+
+    return Div(
+        A("EN", href=en_href,
+          cls='text-white hover:text-blue-200 px-2 sm:px-3 py-1 sm:py-2 block text-sm sm:text-base'),
+        A("DE", href=de_href,
+          cls='text-white hover:text-blue-200 px-2 sm:px-3 py-1 sm:py-2 block text-sm sm:text-base'),
+        cls='absolute top-full left-0 bg-blue-800 border border-blue-700 rounded shadow-lg hidden z-50 min-w-[50px] sm:min-w-[60px]'
+    )
 
 def check_cookie_consent(request: Request) -> bool:
     """Check if we can set cookies based on existing consent"""
@@ -313,6 +333,50 @@ document.addEventListener('DOMContentLoaded', function() {
   }, { threshold: 0.2 });
   observer.observe(blog);
 });
+"""),
+            Script("""
+window.addEventListener('load', function() {
+  // Language dropdown functionality
+  const languageIcon = document.querySelector('img[src="/assets/images/globe.svg"]');
+  
+  if (languageIcon) {
+    const groupDiv = languageIcon.parentElement;
+    const dropdown = groupDiv.querySelector('.absolute');
+    
+    if (dropdown) {
+      let isOpen = false;
+      
+      languageIcon.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (!isOpen) {
+          // Open dropdown
+          dropdown.classList.remove('hidden');
+          dropdown.style.display = 'block';
+          dropdown.style.visibility = 'visible';
+          dropdown.style.opacity = '1';
+          dropdown.style.zIndex = '9999';
+          isOpen = true;
+        } else {
+          // Close dropdown
+          dropdown.classList.add('hidden');
+          dropdown.style.display = 'none';
+          isOpen = false;
+        }
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (isOpen && !groupDiv.contains(e.target)) {
+          dropdown.classList.add('hidden');
+          dropdown.style.display = 'none';
+          isOpen = false;
+        }
+      });
+    }
+  }
+});
 """)
             )
 
@@ -325,7 +389,8 @@ def get_xml(fname: str):
 @app.get("/{fname:path}.{ext:static}")
 def get(fname:str, ext:str): return FileResponse(f'{fname}.{ext}')
 
-def app_header(T):
+def app_header(T, current_page, mod_locale):
+
    return Header(
        Div(
            # Logo on the far left
@@ -335,32 +400,51 @@ def app_header(T):
                    alt='AIPE Logo',
                    cls='h-6 sm:h-7 w-auto'
                ),
-               href='/',
+               href=f'{mod_locale}/',
                cls='no-underline ml-3 sm:ml-5'
            ),
-           # Navigation items on the right
-           Nav(
-               A(T.t("home"), href='/', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A(T.t("services"), href='/#services', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A(
-                   Span(T.t("about"), cls='sm:hidden'),
-                   Span(T.t("about_us"), cls='hidden sm:inline'),
-                   href='/about', 
-                   cls='text-white hover:text-blue-200 mx-2 sm:mx-4'
+           # Navigation items and language selector on the right
+           Div(
+               # Language selector (left of navigation) - smaller on mobile
+               Div(
+                   # Globe icon with dropdown
+                   Div(
+                       # Globe icon (using text symbol) - smaller on mobile
+                       Img(
+                           src='/assets/images/globe.svg',
+                           alt='Language',
+                           cls='w-5 h-5 text-white hover:text-blue-200 cursor-pointer'
+                       ),
+                       locale_selector(current_page),
+                       cls='relative group'
+                   ),
+                   cls='flex items-center mr-1 sm:mr-4'  # Smaller margin on mobile
                ),
-               A(T.t("blog"), href='/blog', cls='text-white hover:text-blue-200 mx-2 sm:mx-4'),
-               A(T.t("contact"),
-                 href='/contact',
-                 cls='bg-white text-blue-800 px-3 sm:px-4 py-1.5 rounded-lg hover:bg-blue-100 ml-2 sm:ml-4 mr-3 sm:mr-5'
+               # Navigation items
+               Nav(
+                   A(T.t("home"), href=f'{mod_locale}/', cls='text-white hover:text-blue-200 mx-1 sm:mx-2 md:mx-4'),
+                   A(T.t("services"), href=f'{mod_locale}/#services', cls='text-white hover:text-blue-200 mx-1 sm:mx-2 md:mx-4'),
+                   A(
+                       Span(T.t("about"), cls='sm:hidden'),
+                       Span(T.t("about_us"), cls='hidden sm:inline'),
+                       href=f'{mod_locale}/about', 
+                       cls='text-white hover:text-blue-200 mx-1 sm:mx-2 md:mx-4'
+                   ),
+                   A(T.t("blog"), href=f'{mod_locale}/blog', cls='text-white hover:text-blue-200 mx-1 sm:mx-2 md:mx-4'),
+                   A(T.t("contact"),
+                     href=f'{mod_locale}/contact',
+                     cls='bg-white text-blue-800 px-2 sm:px-3 md:px-4 py-1.5 rounded-lg hover:bg-blue-100 ml-1 sm:ml-2 md:ml-4 mr-2 sm:mr-3 md:mr-5'
+                   ),
+                   cls='flex items-center text-xs sm:text-sm md:text-base'
                ),
-               cls='flex items-center text-sm sm:text-base'
+               cls='flex items-center'
            ),
            cls='flex justify-between items-center py-1.5 sm:py-2 w-full'
        ),
        cls='border-b border-blue-800 bg-blue-800 w-full'
    )
 
-def section_hero(T):
+def section_hero(T, mod_locale):
     return Section(
         Div(
             H1(
@@ -442,7 +526,7 @@ def section_hero(T):
                 A(
                     T.t("hero_cta"),
                     Span('→', cls='ml-2'),
-                    href='/contact',
+                    href=f'{mod_locale}/contact',
                     cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
                 ),
                 cls='mt-20 text-center animate-fade-in-delay-6'
@@ -667,7 +751,7 @@ def solution_card(title, description, animate_class=None):
         cls=f'bg-white rounded-lg p-8 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 {animate_class if animate_class else ""}'
     )
 
-def section_services(T):
+def section_services(T, mod_locale):
     return Section(
         Div(
             H2(
@@ -706,7 +790,7 @@ def section_services(T):
                       cls='text-gray-600 text-lg sm:text-xl text-center mb-8 animate-on-scroll'),
                     Div(
                         A(T.t("solution_cta_button"),
-                          href='/contact',
+                          href=f'{mod_locale}/contact',
                           cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block animate-on-scroll'
                         ),
                         cls='text-center'
@@ -720,7 +804,7 @@ def section_services(T):
         cls='py-20 bg-white', id="services"
     )
 
-def app_footer(T):
+def app_footer(T, mod_locale):
     return Footer(
         # Main footer content
         Div(
@@ -735,7 +819,7 @@ def app_footer(T):
                                 alt='AIPE Logo',
                                 cls='h-8 w-auto'
                             ),
-                            href='/',
+                            href=f'{mod_locale}/',
                             cls='no-underline'
                         ),
                         cls='flex flex-col items-center md:items-start'
@@ -765,11 +849,11 @@ def app_footer(T):
                     ),
                     # Navigation section
                     Nav(
-                        A(T.t("home"), href='/', cls='text-gray-300 hover:text-white'),
-                        A(T.t("services"), href='/#services', cls='text-gray-300 hover:text-white'),
-                        A(T.t("about_us"), href='/about', cls='text-gray-300 hover:text-white'),
-                        A(T.t("blog"), href='/blog', cls='text-gray-300 hover:text-white'),
-                        A(T.t("contact"), href='/contact', cls='text-gray-300 hover:text-white'),
+                        A(T.t("home"), href=f'{mod_locale}/', cls='text-gray-300 hover:text-white'),
+                        A(T.t("services"), href=f'{mod_locale}/#services', cls='text-gray-300 hover:text-white'),
+                        A(T.t("about_us"), href=f'{mod_locale}/about', cls='text-gray-300 hover:text-white'),
+                        A(T.t("blog"), href=f'{mod_locale}/blog', cls='text-gray-300 hover:text-white'),
+                        A(T.t("contact"), href=f'{mod_locale}/contact', cls='text-gray-300 hover:text-white'),
                         cls='space-y-2 flex flex-col items-center md:items-end'
                     ),
                     cls='grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 pb-8'
@@ -784,11 +868,11 @@ def app_footer(T):
                     ),
                     Div(
                         A(T.t("privacy_policy_title"), 
-                          href='/privacy_policy', 
+                          href=f'{mod_locale}/privacy_policy', 
                           cls='text-gray-300 hover:text-white text-sm font-medium'),
                         Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
                         A(T.t("terms_of_service_title"), 
-                          href='/terms_of_service', 
+                          href=f'{mod_locale}/terms_of_service', 
                           cls='text-gray-300 hover:text-white text-sm font-medium'),
                         Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
                         Span('By using this website, you accept our terms and privacy policy.', 
@@ -859,17 +943,17 @@ def get_blog_posts():
     blog_posts.sort(key=lambda x: x['date'], reverse=True)
     return blog_posts
 
-def section_blog(T):
+def section_blog(T, mod_locale):
     blog_posts = get_blog_posts()
 
     return Section(
         Div(
             H2(
-                'Latest Insights',
+                T.t("blog_section_title"),
                 cls='text-4xl sm:text-5xl font-semibold text-gray-900 mb-6 text-center animate-on-scroll'
             ),
             P(
-                'Stay updated with our latest thoughts on AI and its implementation, and industry trends.',
+                T.t("blog_section_description"),
                 cls='text-center text-gray-600 text-2xl sm:text-3xl mb-8 max-w-3xl mx-auto animate-on-scroll'
             ),
             # Blog cards container - use standardized approach
@@ -880,7 +964,7 @@ def section_blog(T):
                     date=post['date'],
                     description=post['description'],
                     image_url=post['image_url'],
-                    url_path=post['url_path'],
+                    url_path=f'{mod_locale}{post["url_path"]}',
                     animate_class='animate-on-scroll'
                 ) for i, post in enumerate(blog_posts[:3])],
                 cls='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto'
@@ -891,16 +975,25 @@ def section_blog(T):
     )
 
 @app.get('/blog')
-def blog_index(request: Request):
+@app.get('/{lang}/blog')
+def blog_index(request: Request, session, lang: str = None):
 
-    locale = detect_locale(request)
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
 
     T = Translator(locale)
 
     blog_posts = get_blog_posts()
 
     return Div(
-        app_header(T),
+        app_header(T, current_page="blog", mod_locale=mod_locale),
         Section(
             Div(
                 H1(T.t("blog_page_title"), cls='text-5xl font-semibold text-gray-900 mb-6 text-center'),
@@ -916,7 +1009,7 @@ def blog_index(request: Request):
                         date=post['date'].strftime('%B %d, %Y') if hasattr(post['date'], 'strftime') else str(post['date']),
                         description=post['description'],
                         image_url=post['image_url'],
-                        url_path=post['url_path']
+                        url_path=f'{mod_locale}{post["url_path"]}',
                     ) for post in blog_posts],
                     cls='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'
                 ),
@@ -924,7 +1017,7 @@ def blog_index(request: Request):
             ),
             cls='py-16'
         ),
-        app_footer(T)
+        app_footer(T, mod_locale)
     )
 
 def privacy_policy_content(T):
@@ -950,34 +1043,61 @@ def terms_of_service_content(T):
         )
 
 @app.get('/terms_of_service')
-def terms_of_service(request: Request):
-    locale = detect_locale(request)
+@app.get('/{lang}/terms_of_service')
+def terms_of_service(request: Request, session, lang: str = None):
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
 
     T = Translator(locale)
     return Div(
-        app_header(T),
+        app_header(T, current_page="terms_of_service"),
         terms_of_service_content(T),
-        app_footer(T)
+        app_footer(T, mod_locale)
     )
 
 @app.get('/privacy_policy')
-def privacy_policy(request: Request):
-    locale = detect_locale(request)
+@app.get('/{lang}/privacy_policy')
+def privacy_policy(request: Request, session, lang: str = None):
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
 
     T = Translator(locale)
     return Div(
-        app_header(T),
+        app_header(T, current_page="privacy_policy"),
         privacy_policy_content(T),
-        app_footer(T)
+        app_footer(T, mod_locale)
     )
 
 @app.get('/about')
-def about(request: Request):
-    locale = detect_locale(request)
+@app.get('/{lang}/about')
+def about(request: Request, session, lang: str = None):
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
 
     T = Translator(locale)
     return Div(
-        app_header(T),
+        app_header(T, current_page="about", mod_locale=mod_locale),
         Main(
         Section(
             Div(
@@ -1072,7 +1192,7 @@ def about(request: Request):
                         Div(
                             A(
                                 T.t("cta_about_us"),
-                                href='/contact',
+                                href=f'{mod_locale}/contact',
                                 cls='bg-blue-800 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-900 transition-all transform hover:scale-105 inline-block'
                             ),
                             cls='text-center'
@@ -1086,32 +1206,51 @@ def about(request: Request):
             cls='py-16 bg-white'
         ),
         ),
-        app_footer(T)
+        app_footer(T, mod_locale)
     )
 
 @app.get('/')
-def home(request: Request):
+@app.get("/{lang}/")
+def home(request: Request, session, lang: str = None):
 
-    locale = detect_locale(request)
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
+
     # Dictionary of locale strings
     T = Translator(locale)
 
     return Div(
-        app_header(T),
+        app_header(T, current_page="home", mod_locale=mod_locale),
         Main(
-            section_hero(T),
+            section_hero(T, mod_locale=mod_locale),
             section_mission(T),
             section_portfolio(T),
-            section_services(T),
-            section_blog(T)
+            section_services(T, mod_locale=mod_locale),
+            section_blog(T, mod_locale=mod_locale)
         ),
-        app_footer(T)
+        app_footer(T, mod_locale)
         )
 
 @app.get('/blog/{url_path}')
-def blog_post(request: Request, url_path: str):
+@app.get('/{lang}/blog/{url_path}')
+def blog_post(request: Request, session, url_path: str, lang: str = None):
 
-    locale = detect_locale(request)
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
 
     # Read the markdown file
     T=Translator(locale)
@@ -1124,7 +1263,7 @@ def blog_post(request: Request, url_path: str):
             post = frontmatter.load(f)
 
         return Div(
-            app_header(T),
+            app_header(T, current_page=f"blog/{url_path}", mod_locale=mod_locale),
             Article(
                 Div(  # Keep outer div for bg-white
                     Div(  # Keep inner div for max-width and padding
@@ -1154,28 +1293,37 @@ def blog_post(request: Request, url_path: str):
                     cls='bg-white'
                 )
             ),
-            app_footer(T)
+            app_footer(T, mod_locale)
         )
     except FileNotFoundError:
         return Div(
-            app_header(T),
+            app_header(T, current_page=f"blog/{url_path}", mod_locale=mod_locale),
             Div(
                 H1("Blog Post Not Found", cls='text-4xl font-bold text-center my-12 text-gray-800'),
                 P("We couldn't find the blog post you're looking for.", cls='text-center text-gray-600'),
                 cls='max-w-3xl mx-auto px-4 py-12'
             ),
-            app_footer(T)
+            app_footer(T, mod_locale)
         )
 
 @app.get('/contact')
-def contact(request: Request):
+@app.get('/{lang}/contact')
+def contact(request: Request, session, lang: str = None):
 
-    locale = detect_locale(request)
+    if lang:
+        locale = lang
+    else:
+        locale = detect_locale(request, session)
+
+    if locale not in supported_locales:
+        locale = 'en'
+
+    mod_locale = modified_locale(locale)
 
     T = Translator(locale)
     return Div(
         Div(  # Wrapper div with flex column
-            app_header(T),
+            app_header(T, current_page="contact", mod_locale=mod_locale),
             Section(
                 Div(
                     # Contact card
@@ -1203,7 +1351,7 @@ def contact(request: Request):
                 ),
                 cls='py-20 bg-gray-50 flex-grow flex items-center'
             ),
-            app_footer(T),
+            app_footer(T, mod_locale),
             cls='min-h-screen flex flex-col'
         )
     )
