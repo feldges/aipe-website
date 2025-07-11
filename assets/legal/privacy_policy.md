@@ -1,12 +1,12 @@
-# Privacy Policy
+## Privacy Policy
 
-*Last updated: April 14, 2025*
+*Last updated: July 11, 2025*
 
-## Introduction
+### Introduction
 
 AIPE Technology ("we," "our," or "us") respects your privacy. We believe in being transparent about how we collect and use information on our website (aipetech.com & aipe.tech).
 
-## Information We Collect
+### Information We Collect
 
 We use two main ways to understand how visitors interact with our website:
 
@@ -26,7 +26,7 @@ Important: This data is completely anonymous - we cannot identify individual vis
 
 This basic information helps us keep our website running smoothly and securely.
 
-## Cookies and Your Choices
+### Cookies and Your Choices
 
 Our website uses cookies (small text files) in two ways:
 
@@ -38,7 +38,7 @@ You have full control through our cookie consent banner (powered by Cookiebot), 
 - Change your preferences anytime
 - Decline non-essential cookies
 
-## How We Use This Information
+### How We Use This Information
 
 We use this anonymous information to:
 - Keep our website working properly
@@ -46,14 +46,14 @@ We use this anonymous information to:
 - Make our website better for visitors
 - Improve our services based on general usage patterns
 
-## Data Privacy and Security
+### Data Privacy and Security
 
 - We only collect anonymous data
 - We don't store personal information
 - Server logs are automatically deleted after 30 days
 - We use industry-standard security measures
 
-## Third-Party Services
+### Third-Party Services
 
 We use two trusted services:
 
@@ -63,17 +63,17 @@ We use two trusted services:
 - **Cookiebot**: Manages cookie preferences
   - You can learn more at: https://www.cookiebot.com/en/privacy-policy/
 
-## Your Rights
+### Your Rights
 
 You can:
 - Choose not to accept analytics cookies
 - Request information about our data practices
 - Contact us with any privacy questions
 
-## Contact Us
+### Contact Us
 
 For any questions about privacy, please email us at: info@aipetech.com
 
-## Changes to This Policy
+### Changes to This Policy
 
 If we update this policy, we'll post the new version here with an updated date.

@@ -10,12 +10,12 @@ load_dotenv()
 supported_locales = ["en", "de"]
 
 def detect_locale(request, session):
-    saved_locale = session.get('user_lang')
-    if saved_locale:
+    saved_locale = session.get('language')
+    if saved_locale and saved_locale in supported_locales:
         return saved_locale
     else:
         browser_locale = request.headers.get('accept-language', 'en').split(',')[0].split('-')[0]
-        if browser_locale:
+        if browser_locale and browser_locale in supported_locales:
             return browser_locale
         else:
             return "en" # fallback to English if no locale is detected
@@ -28,6 +28,24 @@ def modified_locale(locale):
         return ''
     else:
         return f'/{locale}'
+
+def resolve_locale_and_redirect(request, session, lang, page_name):
+    if lang:
+        print(f"lang: {lang}")
+        locale = lang
+        print(f"locale: {locale}")
+        if lang == 'en':
+            return Redirect(f"{page_name}"), None
+        if locale not in supported_locales:
+            print(f"locale not in supported_locales: {locale}")
+            print(f"page name: {page_name}")
+            return Redirect(f"{page_name}"), None
+    else:
+        locale = detect_locale(request, session)
+        if locale != 'en':
+            return Redirect(f"/{locale}{page_name}"), None
+
+    return None, locale  # No redirect, return locale
 
 class Translator:
     def __init__(self, locale="en"):
@@ -68,8 +86,14 @@ def locale_selector(current_page):
 
     return Div(
         A("EN", href=en_href,
+          hx_post="/set-language",
+          hx_vals='{"language": "en", "redirect": "' + en_href + '"}',
+          hx_trigger="click",
           cls='text-white hover:text-blue-200 px-2 sm:px-3 py-1 sm:py-2 block text-sm sm:text-base'),
         A("DE", href=de_href,
+          hx_post="/set-language",
+          hx_vals='{"language": "de", "redirect": "' + de_href + '"}',
+          hx_trigger="click",
           cls='text-white hover:text-blue-200 px-2 sm:px-3 py-1 sm:py-2 block text-sm sm:text-base'),
         cls='absolute top-full left-0 bg-blue-800 border border-blue-700 rounded shadow-lg hidden z-50 min-w-[50px] sm:min-w-[60px]'
     )
@@ -93,6 +117,247 @@ cookiebot_id = os.getenv('COOKIEBOT_ID')
 socials = Socials(title="AIPE Technology", description="Consulting firm turning AI potential into working business solutions", site_name='www.aipe.tech', image='https://www.aipe.tech/assets/images/aipe_technology_screen.png', url='https://www.aipe.tech')
 
 tailwind_css = Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
+
+markdown_css = Style("""
+    /* Custom markdown styles that work with TailwindCSS */
+    .prose {
+        color: #374151;
+        max-width: none;
+        line-height: 1.75;
+    }
+    
+    .prose h1 {
+        color: #111827;
+        font-weight: 800;
+        font-size: 2.25rem;
+        line-height: 1.1111111;
+        margin-top: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .prose h2 {
+        color: #111827;
+        font-weight: 700;
+        font-size: 1.875rem;
+        line-height: 1.3333333;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .prose h3 {
+        color: #111827;
+        font-weight: 600;
+        font-size: 1.5rem;
+        line-height: 1.3333333;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .prose h4 {
+        color: #111827;
+        font-weight: 600;
+        font-size: 1.25rem;
+        line-height: 1.4;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .prose p {
+        margin-top: 0;
+        margin-bottom: 1.25rem;
+        line-height: 1.75;
+    }
+    
+    .prose strong {
+        color: #111827;
+        font-weight: 600;
+    }
+    
+    .prose em {
+        font-style: italic;
+    }
+    
+    .prose ul {
+        list-style-type: disc;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.625rem;
+    }
+    
+    .prose ol {
+        list-style-type: decimal;
+        margin-top: 1.25rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.625rem;
+    }
+    
+    .prose li {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .prose li p {
+        margin-top: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .prose blockquote {
+        font-weight: 500;
+        font-style: italic;
+        color: #111827;
+        border-left: 0.25rem solid #d1d5db;
+        quotes: "\\201C""\\201D""\\2018""\\2019";
+        margin-top: 1.6rem;
+        margin-bottom: 1.6rem;
+        padding-left: 1rem;
+    }
+    
+    .prose blockquote p:first-of-type::before {
+        content: open-quote;
+    }
+    
+    .prose blockquote p:last-of-type::after {
+        content: close-quote;
+    }
+    
+    .prose code {
+        color: #111827;
+        font-weight: 600;
+        font-size: 0.875rem;
+        background-color: #f3f4f6;
+        padding: 0.125rem 0.25rem;
+        border-radius: 0.25rem;
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+    
+    .prose pre {
+        color: #e5e7eb;
+        background-color: #1f2937;
+        overflow-x: auto;
+        font-size: 0.875rem;
+        line-height: 1.7142857;
+        margin-top: 1.7142857em;
+        margin-bottom: 1.7142857em;
+        border-radius: 0.375rem;
+        padding: 1rem;
+    }
+    
+    .prose pre code {
+        background-color: transparent;
+        border-width: 0;
+        border-radius: 0;
+        padding: 0;
+        font-weight: 400;
+        color: inherit;
+        font-size: inherit;
+        font-family: inherit;
+        line-height: inherit;
+    }
+    
+    .prose pre code::before,
+    .prose pre code::after {
+        content: none;
+    }
+    
+    .prose a {
+        color: #1d4ed8;
+        text-decoration: underline;
+        font-weight: 500;
+    }
+    
+    .prose a:hover {
+        color: #1e40af;
+    }
+    
+    .prose table {
+        width: 100%;
+        table-layout: auto;
+        text-align: left;
+        margin-top: 2em;
+        margin-bottom: 2em;
+        font-size: 0.875rem;
+        line-height: 1.7142857;
+        border-collapse: collapse;
+    }
+    
+    .prose thead {
+        border-bottom: 1px solid #d1d5db;
+    }
+    
+    .prose thead th {
+        color: #111827;
+        font-weight: 600;
+        vertical-align: bottom;
+        padding-right: 0.5714286em;
+        padding-bottom: 0.5714286em;
+        padding-left: 0.5714286em;
+    }
+    
+    .prose tbody tr {
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .prose tbody tr:last-child {
+        border-bottom-width: 0;
+    }
+    
+    .prose tbody td {
+        vertical-align: baseline;
+        padding: 0.5714286em;
+    }
+    
+    .prose img {
+        margin-top: 2em;
+        margin-bottom: 2em;
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+    }
+    
+    .prose hr {
+        border-color: #d1d5db;
+        border-top-width: 1px;
+        margin-top: 3em;
+        margin-bottom: 3em;
+    }
+    
+    /* Responsive adjustments */
+    .prose-lg {
+        font-size: 1.125rem;
+        line-height: 1.7777778;
+    }
+    
+    .prose-lg h1 {
+        font-size: 2.6666667rem;
+        margin-bottom: 1.3333333rem;
+        line-height: 1;
+    }
+    
+    .prose-lg h2 {
+        font-size: 2.2222222rem;
+        margin-top: 2.2222222rem;
+        margin-bottom: 1.1111111rem;
+        line-height: 1.2;
+    }
+    
+    .prose-lg h3 {
+        font-size: 1.6666667rem;
+        margin-top: 1.7777778rem;
+        margin-bottom: 0.6666667rem;
+        line-height: 1.3333333;
+    }
+    
+    .prose-lg p {
+        margin-top: 0;
+        margin-bottom: 1.3333333rem;
+    }
+    
+    .prose-lg blockquote {
+        margin-top: 1.7777778rem;
+        margin-bottom: 1.7777778rem;
+        padding-left: 1.1111111rem;
+    }
+""")
 
 # Add custom CSS for animations
 custom_css = Style("""
@@ -192,9 +457,10 @@ headers =   (Meta(name="robots", content="index, follow"),
             MarkdownJS(),
             socials,
             Favicon('/assets/images/favicon.ico', '/assets/images/favicon.ico'),
-            tailwind_css,
-            custom_css,
             #picolink,
+            tailwind_css,
+            markdown_css,
+            custom_css,
             # First set default consent settings to denied
             Script("""
                 window.dataLayer = window.dataLayer || [];
@@ -978,13 +1244,9 @@ def section_blog(T, mod_locale):
 @app.get('/{lang}/blog')
 def blog_index(request: Request, session, lang: str = None):
 
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
-
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, '/blog')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
@@ -1020,78 +1282,77 @@ def blog_index(request: Request, session, lang: str = None):
         app_footer(T, mod_locale)
     )
 
-def privacy_policy_content(T):
-    with open('assets/legal/privacy_policy.md', 'r') as file:
+def privacy_policy_content(T, locale):
+    if locale == 'en':
+        file_path = 'assets/legal/privacy_policy.md'
+    else:
+        file_path = f'assets/legal/privacy_policy_{locale}.md'
+    with open(file_path, 'r') as file:
         PRIVACY_POLICY = file.read()
         return Div(
             Div(  # Added wrapper div for centering
                 PRIVACY_POLICY,
-                cls='marked prose prose-lg max-w-3xl mx-auto px-4'  # Added centering classes
+                cls='marked prose prose-lg max-w-none'
             ),
-            cls='py-12'  # Added vertical padding
+            cls='max-w-3xl mx-auto px-4 py-12'
         )
 
-def terms_of_service_content(T):
-    with open('assets/legal/terms_of_service.md', 'r') as file:
+def terms_of_service_content(T, locale):
+    if locale == 'en':
+        file_path = 'assets/legal/terms_of_service.md'
+    else:
+        file_path = f'assets/legal/terms_of_service_{locale}.md'
+    with open(file_path, 'r') as file:
         TERMS_OF_SERVICE = file.read()
         return Div(
             Div(  # Added wrapper div for centering
                 TERMS_OF_SERVICE,
-                cls='marked prose prose-lg max-w-3xl mx-auto px-4'  # Added centering classes
+                cls='marked prose prose-lg max-w-none'
             ),
-            cls='py-12'  # Added vertical padding
+            cls='max-w-3xl mx-auto px-4 py-12'
         )
 
 @app.get('/terms_of_service')
 @app.get('/{lang}/terms_of_service')
 def terms_of_service(request: Request, session, lang: str = None):
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
 
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, '/terms_of_service')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
     T = Translator(locale)
     return Div(
-        app_header(T, current_page="terms_of_service"),
-        terms_of_service_content(T),
+        app_header(T, current_page="terms_of_service", mod_locale=mod_locale),
+        terms_of_service_content(T, locale),
         app_footer(T, mod_locale)
     )
 
 @app.get('/privacy_policy')
 @app.get('/{lang}/privacy_policy')
 def privacy_policy(request: Request, session, lang: str = None):
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
 
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, '/privacy_policy')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
     T = Translator(locale)
     return Div(
-        app_header(T, current_page="privacy_policy"),
-        privacy_policy_content(T),
+        app_header(T, current_page="privacy_policy", mod_locale=mod_locale),
+        privacy_policy_content(T, locale),
         app_footer(T, mod_locale)
     )
 
 @app.get('/about')
 @app.get('/{lang}/about')
 def about(request: Request, session, lang: str = None):
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
 
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, '/about')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
@@ -1213,13 +1474,9 @@ def about(request: Request, session, lang: str = None):
 @app.get("/{lang}/")
 def home(request: Request, session, lang: str = None):
 
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
-
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, '/')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
@@ -1242,13 +1499,9 @@ def home(request: Request, session, lang: str = None):
 @app.get('/{lang}/blog/{url_path}')
 def blog_post(request: Request, session, url_path: str, lang: str = None):
 
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
-
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, f'/blog/{url_path}')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
@@ -1310,13 +1563,9 @@ def blog_post(request: Request, session, url_path: str, lang: str = None):
 @app.get('/{lang}/contact')
 def contact(request: Request, session, lang: str = None):
 
-    if lang:
-        locale = lang
-    else:
-        locale = detect_locale(request, session)
-
-    if locale not in supported_locales:
-        locale = 'en'
+    redirect_response, locale = resolve_locale_and_redirect(request, session, lang, '/contact')
+    if redirect_response:
+        return redirect_response
 
     mod_locale = modified_locale(locale)
 
@@ -1355,6 +1604,15 @@ def contact(request: Request, session, lang: str = None):
             cls='min-h-screen flex flex-col'
         )
     )
+
+# Handler for setting language in session
+@app.post("/set-language")
+def set_language(request: Request, language: str, redirect: str, session):
+    if check_cookie_consent(request):
+        session['language'] = language
+    response = Response()
+    response.headers["HX-Redirect"] = redirect
+    return response
 
 if __name__ == "__main__":
     # Generate sitemap
