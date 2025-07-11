@@ -1,111 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://www.aipe.tech/</loc>
         <lastmod>2025-07-11</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/" />
+    </url>
+    <url>
+        <loc>https://www.aipe.tech/de/</loc>
+        <lastmod>2025-07-11</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/" />
     </url>
     <url>
         <loc>https://www.aipe.tech/blog</loc>
         <lastmod>2025-07-11</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/blog" />
+    </url>
+    <url>
+        <loc>https://www.aipe.tech/de/blog</loc>
+        <lastmod>2025-07-11</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/blog" />
     </url>
     <url>
         <loc>https://www.aipe.tech/about</loc>
         <lastmod>2025-07-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/about" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/about" />
+    </url>
+    <url>
+        <loc>https://www.aipe.tech/de/about</loc>
+        <lastmod>2025-07-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/about" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/about" />
     </url>
     <url>
         <loc>https://www.aipe.tech/contact</loc>
         <lastmod>2025-07-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/contact" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/contact" />
+    </url>
+    <url>
+        <loc>https://www.aipe.tech/de/contact</loc>
+        <lastmod>2025-07-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/contact" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/contact" />
     </url>
     <url>
         <loc>https://www.aipe.tech/privacy_policy</loc>
         <lastmod>2025-07-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/privacy_policy" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/privacy_policy" />
+    </url>
+    <url>
+        <loc>https://www.aipe.tech/de/privacy_policy</loc>
+        <lastmod>2025-07-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/privacy_policy" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/privacy_policy" />
     </url>
     <url>
         <loc>https://www.aipe.tech/terms_of_service</loc>
         <lastmod>2025-07-11</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/terms_of_service" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/terms_of_service" />
     </url>
     <url>
-        <loc>https://www.aipe.tech/blog/unlocking-document-intelligence-with-vision-language-models</loc>
-        <lastmod>2024-09-19</lastmod>
+        <loc>https://www.aipe.tech/de/terms_of_service</loc>
+        <lastmod>2025-07-11</lastmod>
         <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
+        <priority>0.5</priority>
+        <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/terms_of_service" />
+        <xhtml:link rel="alternate" hreflang="de" href="https://www.aipe.tech/de/terms_of_service" />
     </url>
     <url>
-        <loc>https://www.aipe.tech/blog/beyond-chatbots-building-reports-with-large-language-models</loc>
-        <lastmod>2024-11-29</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/unlocking-document-intelligence-with-vision-language-models</loc>
+            <lastmod>2024-09-19</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/unlocking-document-intelligence-with-vision-language-models" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/deepseek-s-r1-is-great-here-s-the-catch</loc>
-        <lastmod>2025-01-29</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/beyond-chatbots-building-reports-with-large-language-models</loc>
+            <lastmod>2024-11-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/beyond-chatbots-building-reports-with-large-language-models" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/what-is-the-future-of-AI</loc>
-        <lastmod>2024-11-04</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/deepseek-s-r1-is-great-here-s-the-catch</loc>
+            <lastmod>2025-01-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/deepseek-s-r1-is-great-here-s-the-catch" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/deploying-generative-ai-in-a-large-company-lessons-learned-and-best-practices</loc>
-        <lastmod>2024-06-03</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/what-is-the-future-of-AI</loc>
+            <lastmod>2024-11-04</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/what-is-the-future-of-AI" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/the-next-wave-of-automation-is-here-my-test-of-web-browsing-ai-agents</loc>
-        <lastmod>2025-03-10</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/deploying-generative-ai-in-a-large-company-lessons-learned-and-best-practices</loc>
+            <lastmod>2024-06-03</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/deploying-generative-ai-in-a-large-company-lessons-learned-and-best-practices" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/python-is-the-new-excel</loc>
-        <lastmod>2025-02-28</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/the-next-wave-of-automation-is-here-my-test-of-web-browsing-ai-agents</loc>
+            <lastmod>2025-03-10</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/the-next-wave-of-automation-is-here-my-test-of-web-browsing-ai-agents" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/ai-deployment-lessons-from-history-on-technology-adoption</loc>
-        <lastmod>2025-04-29</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/python-is-the-new-excel</loc>
+            <lastmod>2025-02-28</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/python-is-the-new-excel" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/the-programming-ai-hype-vs-reality-what-new-research-actually-shows</loc>
-        <lastmod>2025-06-24</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/ai-deployment-lessons-from-history-on-technology-adoption</loc>
+            <lastmod>2025-04-29</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/ai-deployment-lessons-from-history-on-technology-adoption" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/large-language-models-are-not-reasoning-engines</loc>
-        <lastmod>2024-07-08</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/the-programming-ai-hype-vs-reality-what-new-research-actually-shows</loc>
+            <lastmod>2025-06-24</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/the-programming-ai-hype-vs-reality-what-new-research-actually-shows" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/the-ai-hype-tax-how-overpromising-hurts-real-business-results</loc>
-        <lastmod>2025-06-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/large-language-models-are-not-reasoning-engines</loc>
+            <lastmod>2024-07-08</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/large-language-models-are-not-reasoning-engines" />
+        </url>
     <url>
-        <loc>https://www.aipe.tech/blog/can-large-language-models-reason</loc>
-        <lastmod>2024-10-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
+            <loc>https://www.aipe.tech/blog/the-ai-hype-tax-how-overpromising-hurts-real-business-results</loc>
+            <lastmod>2025-06-13</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/the-ai-hype-tax-how-overpromising-hurts-real-business-results" />
+        </url>
+    <url>
+            <loc>https://www.aipe.tech/blog/can-large-language-models-reason</loc>
+            <lastmod>2024-10-15</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/can-large-language-models-reason" />
+        </url>
 </urlset>
