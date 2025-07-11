@@ -20,9 +20,6 @@ def detect_locale(request, session):
         else:
             return "en" # fallback to English if no locale is detected
 
-def is_valid_locale(locale):
-    return locale in supported_locales
-
 def modified_locale(locale):
     if locale == 'en':
         return ''
@@ -31,14 +28,10 @@ def modified_locale(locale):
 
 def resolve_locale_and_redirect(request, session, lang, page_name):
     if lang:
-        print(f"lang: {lang}")
         locale = lang
-        print(f"locale: {locale}")
         if lang == 'en':
             return Redirect(f"{page_name}"), None
         if locale not in supported_locales:
-            print(f"locale not in supported_locales: {locale}")
-            print(f"page name: {page_name}")
             return Redirect(f"{page_name}"), None
     else:
         locale = detect_locale(request, session)
@@ -97,18 +90,6 @@ def locale_selector(current_page):
           cls='text-white hover:text-blue-200 px-2 sm:px-3 py-1 sm:py-2 block text-sm sm:text-base'),
         cls='absolute top-full left-0 bg-blue-800 border border-blue-700 rounded shadow-lg hidden z-50 min-w-[50px] sm:min-w-[60px]'
     )
-
-def check_cookie_consent(request: Request) -> bool:
-    """Check if we can set cookies based on existing consent"""
-    # Check if user has given consent via cookie
-    consent_given = request.cookies.get('CookieConsent', 'false').lower() == 'true'
-    print(f"Cookie consent: {consent_given}")
-
-    # If no consent cookie exists, assume allowed (non-EU user)
-    if 'CookieConsent' not in request.cookies:
-        return True  # Assume consent for non-EU users
-
-    return consent_given
 
 # Get environment variables
 ga_id = os.getenv('GOOGLE_ANALYTICS_ID')
@@ -1608,8 +1589,7 @@ def contact(request: Request, session, lang: str = None):
 # Handler for setting language in session
 @app.post("/set-language")
 def set_language(request: Request, language: str, redirect: str, session):
-    if check_cookie_consent(request):
-        session['language'] = language
+    session['language'] = language
     response = Response()
     response.headers["HX-Redirect"] = redirect
     return response
