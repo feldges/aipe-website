@@ -1129,7 +1129,7 @@ def app_footer(T, mod_locale):
             Div(
                 Div(
                     P(
-                        '© 2025 AIPE Technology. All rights reserved.',
+                        '© 2025 AIPE Technology. ' + T.t("rights_reserved") + '.',
                         cls='text-gray-400 text-sm text-center md:text-left'  # Changed from text-xs to text-sm
                     ),
                     Div(
@@ -1141,7 +1141,7 @@ def app_footer(T, mod_locale):
                           href=f'{mod_locale}/terms_of_service', 
                           cls='text-gray-300 hover:text-white text-sm font-medium'),
                         Span('•', cls='mx-2 text-gray-400 text-sm'),  # Updated dot styling
-                        Span('By using this website, you accept our terms and privacy policy.', 
+                        Span(T.t("accept_terms"), 
                              cls='text-gray-400 text-sm'),  # Made consistent with other text
                         cls='flex items-center justify-center md:justify-end flex-wrap gap-1'
                     ),
