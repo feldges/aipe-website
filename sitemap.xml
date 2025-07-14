@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://www.aipe.tech/</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/" />
@@ -10,7 +10,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/de/</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/" />
@@ -18,7 +18,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/blog</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog" />
@@ -26,7 +26,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/de/blog</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog" />
@@ -34,7 +34,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/about</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/about" />
@@ -42,7 +42,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/de/about</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/about" />
@@ -50,7 +50,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/contact</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/contact" />
@@ -58,7 +58,7 @@
     </url>
     <url>
         <loc>https://www.aipe.tech/de/contact</loc>
-        <lastmod>2025-07-11</lastmod>
+        <lastmod>2025-07-14</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
         <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/contact" />
@@ -172,6 +172,13 @@
             <changefreq>monthly</changefreq>
             <priority>0.7</priority>
             <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/the-ai-hype-tax-how-overpromising-hurts-real-business-results" />
+        </url>
+    <url>
+            <loc>https://www.aipe.tech/blog/why-your-internal-chatbot-should-be-model-agnostic</loc>
+            <lastmod>2025-07-17</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.7</priority>
+            <xhtml:link rel="alternate" hreflang="en" href="https://www.aipe.tech/blog/why-your-internal-chatbot-should-be-model-agnostic" />
         </url>
     <url>
             <loc>https://www.aipe.tech/blog/can-large-language-models-reason</loc>
